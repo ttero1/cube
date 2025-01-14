@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 19:45:18 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/14 13:41:29 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/14 15:25:07 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char map [10][24]=
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,'N',0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,'E',0,0,0,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,1,1,1,1,1,0,0,0,0,1,0,1,0,1,0,0,0,1},
   {1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,1},
@@ -132,6 +132,34 @@ int check_wall_left (t_data *data)
 	return (1);
 }
 
+void calc_left(t_data *data)
+{
+	int x;
+	double delta_x;
+	double	dis;
+
+
+	x = data->x_pos / BLOCK_SIZE;
+	delta_x = data->x_pos / BLOCK_SIZE - x;
+	dis = delta_x / cos(PI - data->angle);
+	//dis = 1;
+	printf ("%d     %f     %f        %f \n", x, delta_x, dis, data->angle);
+}
+
+void calc_right(t_data *data)
+{
+	int x;
+	double delta_x;
+	double	dis;
+
+
+	x = data->x_pos / BLOCK_SIZE;
+	delta_x = data->x_pos / BLOCK_SIZE - x;
+	dis = delta_x / cos(data->angle);
+	//dis = 1;
+	printf ("%d     %f     %f        %f \n", x, delta_x, dis, data->angle);
+}
+
 
 void	ft_hook(void *param)
 {
@@ -188,16 +216,16 @@ void	ft_hook(void *param)
 	if (mlx_is_key_down(data->mlx, MLX_KEY_LEFT))
 	{
 		data->angle -= SPEED_RAD;
-		if (data->angle >= 2 * PI)
+		if (data->angle <= 0)
 			data->angle +=  2 * PI;
 	}
 	if (mlx_is_key_down(data->mlx, MLX_KEY_RIGHT))
 	{
 		data->angle += SPEED_RAD; 
-		if (data->angle <= 2 * PI)
+		if (data->angle >= 2 * PI)
 			data->angle -=  2 * PI;
 	}
-	//printf("%f\n", data->x_pos);
+	//printf("%f\n", data->angle);
 	uint32_t	color;
 	
 	color = ft_pixel(
@@ -207,6 +235,10 @@ void	ft_hook(void *param)
 			255
 			);
 	mlx_put_pixel(data->image, data->x_pos, data->y_pos, color);
+	if (data->angle > PI /2 && data->angle < PI * 1.5)
+		calc_left(data);
+	else	
+		calc_right(data);
 }
 
 void	get_player_position(t_data *data)
@@ -229,7 +261,7 @@ void	get_player_position(t_data *data)
 			{
 				data->x_pos = x * BLOCK_SIZE + BLOCK_SIZE / 2;
 				data->y_pos = y * BLOCK_SIZE + BLOCK_SIZE / 2;
-				data ->angle = 0;
+				data ->angle = PI;
 			}
 			if (map[y][x] == 'N')
 			{
@@ -241,7 +273,7 @@ void	get_player_position(t_data *data)
 			{
 				data->x_pos = x * BLOCK_SIZE + BLOCK_SIZE / 2;
 				data->y_pos = y * BLOCK_SIZE + BLOCK_SIZE / 2;
-				data ->angle = PI;
+				data ->angle = 0;
 			}
 			if (map[y][x] == 'S')
 			{
@@ -282,24 +314,14 @@ void get_map_size(t_data *data)
 	data->map_size_y = y;
 }
 
-int32_t	main(int argc, char **argv)
+
+int32_t	main()
 {
 	t_data	data;
 
 	get_map_size(&data);
 	get_player_position(&data);
 	start_mlx(mlx_init(WIDTH, HEIGHT, "Cube", true), &data);
-	/* if (!(data.mlx = mlx_init(WIDTH, HEIGHT, "MLX42", true)))
-	{
-		puts(mlx_strerror(mlx_errno));
-		return (EXIT_FAILURE);
-	}
-	if (!(data.image = mlx_new_image(data.mlx, WIDTH, HEIGHT)))
-	{
-		mlx_close_window(data.mlx);
-		puts(mlx_strerror(mlx_errno));
-		return (EXIT_FAILURE);
-	} */
 	if (mlx_image_to_window(data.mlx, data.image, 0, 0) == -1)
 	{
 		mlx_close_window(data.mlx);

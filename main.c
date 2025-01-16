@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 19:45:18 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/14 15:25:07 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/16 20:44:56 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	draw_map(t_data *data)
 
 	x= 0;
 	y = 0;
-	while (y < data->map_size_y)
+	while (y < data->map_size_y + 1)
 	{
 		while (x < data->map_size_x)
 		{
@@ -132,6 +132,33 @@ int check_wall_left (t_data *data)
 	return (1);
 }
 
+void calc_up(t_data *data)
+{
+	int y;
+	double delta_y;
+	double	dis;
+
+
+	y = data->y_pos / BLOCK_SIZE;
+	delta_y = data->y_pos / BLOCK_SIZE - y;
+	dis = delta_y / sin(PI - data->angle);
+	printf ("%d     %f     %f        %f \n", y, delta_y, dis, data->angle);
+}
+
+void calc_down(t_data *data)
+{
+	int y;
+	double delta_y;
+	double	dis;
+
+
+	y = data->y_pos / BLOCK_SIZE;
+	delta_y = data->y_pos / BLOCK_SIZE - y;
+	dis = delta_y / sin(data->angle);
+	printf ("%d     %f     %f        %f \n", y, delta_y, dis, data->angle);
+}
+
+
 void calc_left(t_data *data)
 {
 	int x;
@@ -158,6 +185,42 @@ void calc_right(t_data *data)
 	dis = delta_x / cos(data->angle);
 	//dis = 1;
 	printf ("%d     %f     %f        %f \n", x, delta_x, dis, data->angle);
+}
+
+void cast_rays (t_data *data, t_raycast *raycast)
+{
+	float x_dis;
+	float y_dis;
+
+	x_dis = calc_right(data);
+	y_dis = calc_down(data);
+	if (x_dis >= y_dis)
+	{
+		raycast->distance += x_dis;
+		raycast->x_pos_ray += x_dis * cos(data->angle);
+		raycast->y_pos_ray +=x_dis * sin(data->angle);
+	}
+	else
+	{
+		raycast->distance += y_dis;
+		raycast->x_pos_ray += y_dis * cos(data->angle);
+		raycast->y_pos_ray +=y_dis * sin(data->angle);;
+	}
+}
+
+void calc_distance(t_data *data)
+{
+	t_raycast	raycast;
+
+	raycast.distance = 0;
+	raycast.x_pos_ray = data->x_pos;
+	raycast.y_pos_ray = data->y_pos;
+	raycast.hit_wall = 0;
+
+	while (raycast.hit_wall == 0 && raycast.distance < 5 * BLOCK_SIZE)
+	{
+		cast_rays(data, &raycast);
+	}
 }
 
 
@@ -221,13 +284,13 @@ void	ft_hook(void *param)
 	}
 	if (mlx_is_key_down(data->mlx, MLX_KEY_RIGHT))
 	{
-		data->angle += SPEED_RAD; 
+		data->angle += SPEED_RAD;
 		if (data->angle >= 2 * PI)
 			data->angle -=  2 * PI;
 	}
 	//printf("%f\n", data->angle);
 	uint32_t	color;
-	
+
 	color = ft_pixel(
 			100,
 			100,
@@ -235,10 +298,6 @@ void	ft_hook(void *param)
 			255
 			);
 	mlx_put_pixel(data->image, data->x_pos, data->y_pos, color);
-	if (data->angle > PI /2 && data->angle < PI * 1.5)
-		calc_left(data);
-	else	
-		calc_right(data);
 }
 
 void	get_player_position(t_data *data)

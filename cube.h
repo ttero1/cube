@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 19:14:50 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/14 15:04:20 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/16 19:40:06 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,15 @@
 # define SPEED_RAD 0.05
 # define BLOCK_SIZE 30
 #define PI 3.141592653589793
+
+
+typedef struct s_raycast
+{
+	double	distance;
+	double x_pos_ray;
+	double y_pos_ray;
+	int		hit_wall;
+}				t_raycast;
 
 
 typedef struct s_data

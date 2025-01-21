@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 19:45:18 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/18 15:53:55 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/21 19:46:41 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,31 +31,33 @@ int32_t	ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a)
 {
 	return (r << 24 | g << 16 | b << 8 | a);
 }
-void paint_block(t_data *data, int x, int y)
+void paint_block(t_data *data, int x, int y, int flag)
 {
 	int z;
 	int a;
-	uint32_t	color;
-	color = ft_pixel(
-			200,
-			100,
-			0,
-			255
-			);
+	uint32_t	color_block;
+	uint32_t	color_empty;
+
+	color_block = ft_pixel( 200, 100, 0, 255);
+	color_empty = ft_pixel( 255, 255, 255, 255);
 	z = 0;
 	a = 0;
-	x *= BLOCK_SIZE;
-	y *= BLOCK_SIZE;
-	while (z < BLOCK_SIZE)
+	x *= BLOCK_SIZE / 6;
+	y *= BLOCK_SIZE / 6;
+	//printf ("%d", flag);
+	while (z < BLOCK_SIZE/ 6)
 	{
-		while (a < BLOCK_SIZE)
+		while (a < BLOCK_SIZE/ 6)
 		{
-			mlx_put_pixel(data->image, x, y, color);
+			if (flag == 1)
+				mlx_put_pixel(data->image, x, y, color_block);
+			else
+				mlx_put_pixel(data->image, x, y, color_empty);
 			a++;
 			x++;
 		}
 		a = 0;
-		x -= BLOCK_SIZE;
+		x -= BLOCK_SIZE/ 6;
 		//mlx_put_pixel(data->image, x, y, color);
 		z++;
 		y++;
@@ -63,10 +65,33 @@ void paint_block(t_data *data, int x, int y)
 	}
 }
 
+void	draw_player(t_data *data)
+{
+	uint32_t	color;
+	int x;
+	int y;
+
+	x = 0;
+	y = 0;
+	color = ft_pixel( 0, 0, 0, 255);
+	mlx_put_pixel(data->image, data->x_pos/ 6, data->y_pos/ 6, color);
+	while (y < 3)
+	{
+		while (x < 3)
+		{
+			mlx_put_pixel(data->image, data->x_pos/ 6 + x , data->y_pos/ 6+ y, color);
+			x ++;
+		}
+		x = 0;
+		y++;
+	}
+}
+
 void	draw_map(t_data *data)
 {
 	int x;
 	int y;
+
 
 	x= 0;
 	y = 0;
@@ -76,13 +101,16 @@ void	draw_map(t_data *data)
 		{
 			if (map[y][x] == 1)
 			{
-				paint_block(data, x, y);
+				paint_block(data, x, y, 1);
 			}
+			else
+				paint_block(data, x, y, 0);
 			x++;
 		}
 		x  = 0;
 		y++;
 	}
+	draw_player(data);
 }
 
 int check_wall (t_data *data)
@@ -212,13 +240,13 @@ bool check_wall2(int x, int y, t_data *data)
 	//x = x -1;
 	if (map[y][x] == 1)
 	{
-		printf("EEE");
+		//printf("EEE");
 		return true;
 	}
 	return (false);
 }
 
-double calc_y_distance2(t_data *data, t_raycast *raycast)
+double calc_y_distance2(t_data *data, t_raycast *raycast, double angle)
 {
 	int y;
 	double delta_y;
@@ -227,7 +255,7 @@ double calc_y_distance2(t_data *data, t_raycast *raycast)
 
 	dis = 0;
 	y = raycast->y_pos_ray / BLOCK_SIZE;
-	if (data->angle <= PI)
+	if (angle <= PI)
 		delta_y = raycast->y_pos_ray -(y + 1) * BLOCK_SIZE;
 	else
 		delta_y = (y) * BLOCK_SIZE - raycast->y_pos_ray ;
@@ -237,13 +265,13 @@ double calc_y_distance2(t_data *data, t_raycast *raycast)
 		delta_y += 0.1;
 	else
 		delta_y -= 0.1; */
-	dis = delta_y / sin(data->angle);
+	dis = delta_y / sin(angle);
 	//printf ("%f     %d     %f     %f        %f \n",  raycast->y_pos_ray, y, delta_y, dis, data->angle);
 	//printf ("%d     %f     %f        %f \n", y, delta_y, dis, data->angle);
 	return (dis);
 }
 
-double calc_x_distance2(t_data *data , t_raycast *raycast)
+double calc_x_distance2(t_data *data , t_raycast *raycast, double angle)
 {
 	int x;
 	double delta_x;
@@ -252,7 +280,7 @@ double calc_x_distance2(t_data *data , t_raycast *raycast)
 
 	x = raycast->x_pos_ray / BLOCK_SIZE;
 	//delta_x = data->x_pos / BLOCK_SIZE - x;
-	if (data->angle <= PI / 2 || data->angle >= PI * 1.5)
+	if (angle <= PI / 2 || angle >= PI * 1.5)
 		delta_x = raycast->x_pos_ray  - (x + 1) * BLOCK_SIZE;
 	else
 		delta_x = (x) *BLOCK_SIZE - raycast->x_pos_ray ;
@@ -260,24 +288,24 @@ double calc_x_distance2(t_data *data , t_raycast *raycast)
 		delta_x -= 0.1;
 	else
 		delta_x += 0.1; */
-	dis = delta_x / cos(data->angle);
-	printf ("%f    %d     %f     %f        %f \n",raycast->x_pos_ray, x, delta_x, dis, data->angle);
+	dis = delta_x / cos(angle);
+	//printf ("%f    %d     %f     %f        %f \n",raycast->x_pos_ray, x, delta_x, dis, data->angle);
 	//dis = 1;
 	//printf ("%d     %f     %f        %f \n", x, delta_x, dis, data->angle);
 	return (dis);
 }
 
 
-void cast_rays (t_data *data, t_raycast *raycast)
+void cast_rays (t_data *data, t_raycast *raycast, double angle)
 {
 	double x_dis;
 	double y_dis;
 
-	x_dis = calc_x_distance2(data, raycast);
-	y_dis = calc_y_distance2(data, raycast);
+	x_dis = calc_x_distance2(data, raycast, angle);
+	y_dis = calc_y_distance2(data, raycast, angle);
 	if (fabs(x_dis) <= fabs(y_dis))
 	{
-		if (data->angle <= PI / 2 || data->angle >= PI * 1.5)
+		if (angle <= PI / 2 || angle >= PI * 1.5)
 			{
 			if (x_dis == 0)
 				x_dis += 0.1;
@@ -286,9 +314,9 @@ void cast_rays (t_data *data, t_raycast *raycast)
 			if (x_dis == 0)
 				x_dis -= 0.1;
 		raycast->distance += fabs(x_dis);
-		raycast->x_pos_ray += fabs(x_dis) * cos(data->angle);
-		raycast->y_pos_ray +=fabs(x_dis) * sin(data->angle);
-		printf("\n\nAAA%f\n\n ", x_dis);
+		raycast->x_pos_ray += fabs(x_dis) * cos(angle);
+		raycast->y_pos_ray +=fabs(x_dis) * sin(angle);
+		//printf("\n\nAAA%f\n\n ", x_dis);
 		if (check_wall2(raycast->x_pos_ray / BLOCK_SIZE, raycast->y_pos_ray / BLOCK_SIZE, data))
 		{
 			raycast->hit_wall = 1;
@@ -296,18 +324,18 @@ void cast_rays (t_data *data, t_raycast *raycast)
 	}
 	else
 	{
-		if (data->angle <= PI)
+		if (angle <= PI)
 			if (y_dis == 0)
 				y_dis += 0.1;
-		if (data->angle > PI)
+		if (angle > PI)
 			if (y_dis == 0)
-				y_dis -= 0.1; 
+				y_dis -= 0.1;
 		//printf("\n%f\n\n", raycast->y_pos_ray);
 		raycast->distance += fabs(y_dis);
-		raycast->x_pos_ray += fabs(y_dis) * cos(data->angle);
-		raycast->y_pos_ray +=fabs(y_dis) * sin(data->angle);
+		raycast->x_pos_ray += fabs(y_dis) * cos(angle);
+		raycast->y_pos_ray +=fabs(y_dis) * sin(angle);
 		//printf("\n%f\n\n", raycast->y_pos_ray);
-		printf("\n\nBBB%f\n\n", y_dis);
+		//printf("\n\nBBB%f\n\n", y_dis);
 		 if (check_wall2(raycast->x_pos_ray / BLOCK_SIZE, raycast->y_pos_ray/ BLOCK_SIZE, data))
 		{
 			raycast->hit_wall = 2;
@@ -315,9 +343,10 @@ void cast_rays (t_data *data, t_raycast *raycast)
 	}
 }
 
-void calc_distance(t_data *data)
+double calc_distance(t_data *data, double angle)
 {
 	t_raycast	raycast;
+	double fisheye;
 
 	raycast.distance = 0;
 	raycast.x_pos_ray = data->x_pos;
@@ -327,19 +356,218 @@ void calc_distance(t_data *data)
 	//cast_rays(data, &raycast);
 	 while (raycast.hit_wall == 0 && raycast.distance < 5 * BLOCK_SIZE)
 	{
-		cast_rays(data, &raycast);
-	} 
+		cast_rays(data, &raycast, angle);
+	}
 	data->distance = raycast.distance;
-	printf("%f\n", data->distance);
+	fisheye = data->angle - angle;
+	if (fisheye > 2* PI)
+		fisheye -= 2 * PI;
+	if (fisheye < 0)
+		fisheye += 2 * PI;
+	raycast.distance = raycast.distance * cos(fisheye);
+	//printf("%f\n", data->distance);
+	return (raycast.distance);
 }
 
 
+int calculate_start(int x, double distances[60])
+{
+	double height;
+	int start;
+
+	height = HEIGHT / distances[x];
+	start = HEIGHT / 2 - height / 2;
+	if (start < 0)
+		start = 0;
+	return (start);
+}
+
+int calculate_end(int x, double distances[60])
+{
+	double height;
+	int end;
+
+	height = HEIGHT / distances[x];
+	end = HEIGHT / 2 + height / 2;
+	if (end > HEIGHT)
+		end =  HEIGHT - 1;
+	return (end);
+}
+
+double calculate_step(int x, double distances[60])
+{
+	int start;
+	int start2;
+	int step;
+
+	//printf("W");
+	if (x == 60)
+		return (0);
+	start = calculate_start(x, distances);
+	start2 = calculate_start(x + 1, distances);
+	step = (start2 - start) / ((double) WIDTH / 60);
+	return (step);
+}
+
+void draw_ceiling(t_data *data, int start, int x)
+{
+	uint32_t	color;
+
+	color = ft_pixel(
+			100,
+			0,
+			100,
+			255
+			);
+
+	while (start > 1)
+	{
+		mlx_put_pixel(data->image, x, start, color);
+		start --;
+	}
+}
+
+void draw_walls(t_data *data, int start, int end, int x)
+{
+	uint32_t	color;
+	int y;
+
+	color = ft_pixel( 0, 100, 100, 255 );
+	while (start + y < end)
+	{
+		mlx_put_pixel(data->image, x, start + y, color);
+		y++;
+	}
+}
+
+/* void draw_floor(t_data *data, int end, int x)
+{
+	uint32_t	color;
+	color = ft_pixel(
+			100,
+			0,
+			0,
+			255
+			);
+	while (end < HEIGHT - 1)
+	{
+		mlx_put_pixel(data->image, ((double)WIDTH / 60) * x, end, color);
+		end ++;
+	}
+
+}
+ */
+void draw_floor(t_data *data, int end, int x)
+{
+	uint32_t	color;
+	color = ft_pixel(
+			100,
+			0,
+			0,
+			255
+			);
+	while (end < HEIGHT - 1)
+	{
+		mlx_put_pixel(data->image, x, end, color);
+		end ++;
+	}
+
+}
+
+
+void draw_view(t_data *data, double distances[60])
+{
+	int x;
+	double height;
+	int start;
+	int end;
+	double step;
+	int y;
+	int z;
+	uint32_t	color;
+	color = ft_pixel( 0, 100, 100, 255 );
+
+	x = 0;
+	z = 0;
+	while (x < 60)
+	{
+		y = 0;
+		height = HEIGHT / distances[x];
+		start = calculate_start(x, distances);
+		end = calculate_end(x, distances);
+		step = calculate_step(x, distances);
+		//printf ("%d ", step);
+		while (z < WIDTH / 60)
+		{
+			draw_ceiling(data, start + z *step, ((double)WIDTH / 60) * x + z);
+			z++;
+		}
+		z = 0;
+		//draw_ceiling(data, start, ((double)WIDTH / 60) * x);
+		while (z < WIDTH / 60)
+		{
+			draw_walls(data, start + z *step, end - z * step, ((double)WIDTH / 60) * x + z);
+			z++;
+			//z+=100;
+		}
+		//mlx_put_pixel(data->image, ((double) WIDTH / 60) * x, start + y, color);
+		z = 0;
+		while (z < WIDTH / 60)
+		{
+			draw_floor(data, end - z * step, ((double)WIDTH / 60) * x + z);
+			z++;
+		}
+		z = 0;
+		//draw_floor(data, end, x);
+		x++;
+	}
+	draw_map(data);
+
+}
+
+
+/* void draw_view(t_data *data, double distances[60])
+{
+	int x;
+	double height;
+	int start;
+	int end;
+	double step;
+	int y;
+	uint32_t	color;
+	color = ft_pixel( 0, 100, 100, 255 );
+
+	x = 0;
+	while (x < 60)
+	{
+		y = 0;
+		height = HEIGHT / distances[x];
+		start = calculate_start(x, distances);
+		end = calculate_end(x, distances);
+		step = calculate_step(x, distances);
+		//printf ("%d ", step);
+		draw_ceiling(data, start, ((double)WIDTH / 60) * x);
+		draw_walls(data, start, end, ((double)WIDTH / 60) * x);
+		while (start + y < end)
+		{
+			mlx_put_pixel(data->image, ((double) WIDTH / 60) * x, start + y, color);
+			y++;
+		}
+		draw_floor(data, end, x);
+		x++;
+	}
+	draw_map(data);
+
+}
+ */
 void	ft_hook(void *param)
 {
 	t_data	*data;
+	double	distances[60];
+	double angle;
 
 	data = param;
-	draw_map(data);
+	//draw_map(data);
 	if (mlx_is_key_down(data->mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(data->mlx);
 	if (mlx_is_key_down(data->mlx, MLX_KEY_W))
@@ -399,16 +627,26 @@ void	ft_hook(void *param)
 			data->angle -=  2 * PI;
 	}
 	//printf("%f\n", data->angle);
-	uint32_t	color;
+	/* uint32_t	color;
 
 	color = ft_pixel(
 			100,
 			100,
 			100,
 			255
-			);
-	mlx_put_pixel(data->image, data->x_pos, data->y_pos, color);
-	calc_distance(data);
+			); */
+	//mlx_put_pixel(data->image, data->x_pos, data->y_pos, color);
+	int x= 0;
+	angle = data->angle - 30 * RAD;
+	while (x < 60)
+	{
+		distances[x] = calc_distance(data, angle);
+		x ++;
+		angle += RAD;
+	}
+	draw_view(data, distances);
+
+
 }
 
 void	get_player_position(t_data *data)
@@ -468,6 +706,17 @@ void	start_mlx(mlx_t *mlx, t_data *data)
 	if (!data->image)
 		return ;
 }
+
+void	start_mlx2(mlx_t *mlx, t_data *data2)
+{
+	if (!mlx)
+		return ;
+	mlx_set_setting(MLX_STRETCH_IMAGE, true);
+	data2->mlx = mlx;
+	data2->image = mlx_new_image(mlx, WIDTH, HEIGHT);
+	if (!data2->image)
+		return ;
+}
 void get_map_size(t_data *data)
 {
 	int x;
@@ -485,10 +734,23 @@ void get_map_size(t_data *data)
 }
 
 
+
 int32_t	main()
 {
 	t_data	data;
+	t_data2	data2;
+	double	distances[60];
+	double angle;
+	int x= 0;
 
+/* 	start_mlx2(mlx_init(WIDTH, HEIGHT, "game", true), &data2);
+	if (mlx_image_to_window(data2.mlx, data2.image, 0, 0) == -1)
+	{
+		mlx_close_window(data2.mlx);
+		puts(mlx_strerror(mlx_errno));
+		return (1);
+	}
+ */
 	get_map_size(&data);
 	get_player_position(&data);
 	start_mlx(mlx_init(WIDTH, HEIGHT, "Cube", true), &data);
@@ -501,6 +763,16 @@ int32_t	main()
 	mlx_loop_hook(data.mlx, ft_hook, &data);
 	//printf("AAA");
 	//mlx_scroll_hook(data.mlx, &my_scrollhook, &data);
+	/* angle = data.angle - 30 * RAD;
+	while (x < 60)
+	{
+		distances[x] = calc_distance(&data, angle);
+		x ++;
+		angle += RAD;
+	}
+	mlx_loop(data2.mlx);
+	mlx_close_window(data2.mlx);
+	mlx_terminate(data2.mlx); */
 	mlx_loop(data.mlx);
 	mlx_close_window(data.mlx);
 	// mlx_delete_image(data.mlx, data.image);

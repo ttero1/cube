@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 19:45:18 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/21 19:46:41 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/22 21:22:02 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -354,7 +354,7 @@ double calc_distance(t_data *data, double angle)
 	raycast.hit_wall = 0;
 
 	//cast_rays(data, &raycast);
-	 while (raycast.hit_wall == 0 && raycast.distance < 5 * BLOCK_SIZE)
+	 while (raycast.hit_wall == 0 && raycast.distance < 8 * BLOCK_SIZE)
 	{
 		cast_rays(data, &raycast, angle);
 	}
@@ -370,7 +370,7 @@ double calc_distance(t_data *data, double angle)
 }
 
 
-int calculate_start(int x, double distances[60])
+double calculate_start(int x, double distances[60])
 {
 	double height;
 	int start;
@@ -382,7 +382,7 @@ int calculate_start(int x, double distances[60])
 	return (start);
 }
 
-int calculate_end(int x, double distances[60])
+double calculate_end(int x, double distances[60])
 {
 	double height;
 	int end;
@@ -396,12 +396,12 @@ int calculate_end(int x, double distances[60])
 
 double calculate_step(int x, double distances[60])
 {
-	int start;
-	int start2;
-	int step;
+	double start;
+	double start2;
+	double step;
 
 	//printf("W");
-	if (x == 60)
+	if (x == 59)
 		return (0);
 	start = calculate_start(x, distances);
 	start2 = calculate_start(x + 1, distances);
@@ -479,8 +479,8 @@ void draw_view(t_data *data, double distances[60])
 {
 	int x;
 	double height;
-	int start;
-	int end;
+	double start;
+	double end;
 	double step;
 	int y;
 	int z;
@@ -497,14 +497,14 @@ void draw_view(t_data *data, double distances[60])
 		end = calculate_end(x, distances);
 		step = calculate_step(x, distances);
 		//printf ("%d ", step);
-		while (z < WIDTH / 60)
+		while (z <= WIDTH / 60)
 		{
 			draw_ceiling(data, start + z *step, ((double)WIDTH / 60) * x + z);
 			z++;
 		}
 		z = 0;
 		//draw_ceiling(data, start, ((double)WIDTH / 60) * x);
-		while (z < WIDTH / 60)
+		while (z <= WIDTH / 60)
 		{
 			draw_walls(data, start + z *step, end - z * step, ((double)WIDTH / 60) * x + z);
 			z++;
@@ -512,7 +512,7 @@ void draw_view(t_data *data, double distances[60])
 		}
 		//mlx_put_pixel(data->image, ((double) WIDTH / 60) * x, start + y, color);
 		z = 0;
-		while (z < WIDTH / 60)
+		while (z <= WIDTH / 60)
 		{
 			draw_floor(data, end - z * step, ((double)WIDTH / 60) * x + z);
 			z++;

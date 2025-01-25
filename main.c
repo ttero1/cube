@@ -1,37 +1,93 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/13 19:45:18 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/23 19:22:11 by ttero            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "cube.h"
-
-
-const char map [10][24]=
+#include "cub3d.h"
+void	error(char *error_message)
 {
-  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,'E',0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,1,1,1,1,1,0,0,0,0,1,0,1,0,1,0,0,0,1},
-  {1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,1},
-  {1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
-};
+	printf("%s\n", error_message);
+	exit(EXIT_FAILURE);
+}
+
+void	print_game_state(t_game *game)
+{
+	int	i;
+
+    printf("Map Dimensions: %d (width) x %d (height)\n", game->map.width, game->map.height);
+    printf("Textures:\n");
+    printf("  NO: %s\n", game->map.no_text);
+    printf("  SO: %s\n", game->map.so_text);
+    printf("  WE: %s\n", game->map.we_text);
+    printf("  EA: %s\n", game->map.ea_text);
+    printf("Colors:\n");
+    printf("  Floor: %d , %d , %d\n", game->map.floor_color[0], game->map.floor_color[1], game->map.floor_color[2]);
+    printf("  Ceiling: %d , %d , %d\n", game->map.ceiling_color[0], game->map.ceiling_color[1], game->map.ceiling_color[2]);
+    printf("Player:\n");
+    printf("  Position: (x,y) (%d,%d)\n", game->player.x, game->player.y);
+    printf("  Orientation: %c\n", game->player.player_pos);
+    printf("Map:\n");
+	i = 0;
+    while (i < game->map.height)
+	{
+		printf("%s\n", game->map.points[i]);
+		i++;
+    }
+}
+
+int	check_cub_file(const char *file)
+{
+	size_t	len;
+
+	len = ft_strlen(file);
+	if (len <= 4)
+		return (0);
+	if (ft_strncmp(file + len - 4, ".cub", 4) == 0)
+		return (1);
+	return (0);
+}
+
+void	free_map(t_game *game)
+{
+	int	i;
+
+	i = 0;
+	if (game->map.points)
+	{
+		while (game->map.points[i])
+		{
+			free(game->map.points[i]);
+			i++;
+		}
+		free(game->map.points);
+	}
+	if (game->map.no_text)
+		free(game->map.no_text);
+	if (game->map.so_text)
+		free(game->map.so_text);
+	if (game->map.ea_text)
+		free(game->map.ea_text);
+	if (game->map.we_text)
+		free(game->map.we_text);
+	if (game->map.floor_color)
+		free(game->map.floor_color);
+	if (game->map.ceiling_color)
+		free(game->map.ceiling_color);
+}
+
+void	init_values(t_game *game)
+{
+	game->mlx_ptr = 0;
+	game->win_ptr = 0;
+}
+
+
+
+
+
+
+
 
 int32_t	ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a)
 {
 	return (r << 24 | g << 16 | b << 8 | a);
 }
-void paint_block(t_data *data, int x, int y, int flag)
+void paint_block(t_game *game, int x, int y, int flag)
 {
 	int z;
 	int a;
@@ -50,22 +106,22 @@ void paint_block(t_data *data, int x, int y, int flag)
 		while (a < BLOCK_SIZE/ 6)
 		{
 			if (flag == 1)
-				mlx_put_pixel(data->image, x, y, color_block);
+				mlx_put_pixel(game->image, x, y, color_block);
 			else
-				mlx_put_pixel(data->image, x, y, color_empty);
+				mlx_put_pixel(game->image, x, y, color_empty);
 			a++;
 			x++;
 		}
 		a = 0;
 		x -= BLOCK_SIZE/ 6;
-		//mlx_put_pixel(data->image, x, y, color);
+		//mlx_put_pixel(game->image, x, y, color);
 		z++;
 		y++;
 		//x++;
 	}
 }
 
-void	draw_player(t_data *data)
+void	draw_player(t_game *game)
 {
 	uint32_t	color;
 	int x;
@@ -74,12 +130,12 @@ void	draw_player(t_data *data)
 	x = 0;
 	y = 0;
 	color = ft_pixel( 0, 0, 0, 255);
-	mlx_put_pixel(data->image, data->x_pos/ 6, data->y_pos/ 6, color);
+	mlx_put_pixel(game->image, game->x_pos/ 6, game->y_pos/ 6, color);
 	while (y < 3)
 	{
 		while (x < 3)
 		{
-			mlx_put_pixel(data->image, data->x_pos/ 6 + x , data->y_pos/ 6+ y, color);
+			mlx_put_pixel(game->image, game->x_pos/ 6 + x , game->y_pos/ 6+ y, color);
 			x ++;
 		}
 		x = 0;
@@ -87,7 +143,7 @@ void	draw_player(t_data *data)
 	}
 }
 
-void	draw_map(t_data *data)
+void	draw_map(t_game *game)
 {
 	int x;
 	int y;
@@ -95,65 +151,65 @@ void	draw_map(t_data *data)
 
 	x= 0;
 	y = 0;
-	while (y < data->map_size_y + 1)
+	while (y < game->map_size_y)
 	{
-		while (x < data->map_size_x)
+		while (x < game->map_size_x)
 		{
-			if (map[y][x] == 1)
+			if (game->map.points[y][x] == '1')
 			{
-				paint_block(data, x, y, 1);
+				paint_block(game, x, y, 1);
 			}
 			else
-				paint_block(data, x, y, 0);
+				paint_block(game, x, y, 0);
 			x++;
 		}
 		x  = 0;
 		y++;
 	}
-	draw_player(data);
+	draw_player(game);
 }
 
 
 
-void	get_player_position(t_data *data)
+void	get_player_position(t_game *game)
 {
-	data->x_pos = 0;
-	data->y_pos = 0;
-	data->angle = 0;
+	game->x_pos = 0;
+	game->y_pos = 0;
+	game->angle = 0;
 	int x;
 	int y;
 
 	x= 0;
 	y = 0;
-	//data->map_size_x = 24;
-	//data->map_size_y = 10;
-	while (y < data->map_size_y)
+	//game->map_size_x = 24;
+	//game->map_size_y = 10;
+	while (y < game->map_size_y)
 	{
-		while (x < data->map_size_x)
+		while (x < game->map_size_x)
 		{
-			if (map[y][x] == 'W')
+			if (game->map.points[y][x] == 'W')
 			{
-				data->x_pos = x * BLOCK_SIZE + BLOCK_SIZE / 2;
-				data->y_pos = y * BLOCK_SIZE + BLOCK_SIZE / 2;
-				data ->angle = PI;
+				game->x_pos = x * BLOCK_SIZE + BLOCK_SIZE / 2;
+				game->y_pos = y * BLOCK_SIZE + BLOCK_SIZE / 2;
+				game ->angle = PI;
 			}
-			if (map[y][x] == 'N')
+			if (game->map.points[y][x] == 'N')
 			{
-				data->x_pos = x * BLOCK_SIZE + BLOCK_SIZE / 2;
-				data->y_pos = y * BLOCK_SIZE + BLOCK_SIZE / 2;
-				data ->angle =PI * 1.5;
+				game->x_pos = x * BLOCK_SIZE + BLOCK_SIZE / 2;
+				game->y_pos = y * BLOCK_SIZE + BLOCK_SIZE / 2;
+				game ->angle =PI * 1.5;
 			}
-			if (map[y][x] == 'E')
+			if (game->map.points[y][x] == 'E')
 			{
-				data->x_pos = x * BLOCK_SIZE + BLOCK_SIZE / 2;
-				data->y_pos = y * BLOCK_SIZE + BLOCK_SIZE / 2;
-				data ->angle = 0;
+				game->x_pos = x * BLOCK_SIZE + BLOCK_SIZE / 2;
+				game->y_pos = y * BLOCK_SIZE + BLOCK_SIZE / 2;
+				game ->angle = 0;
 			}
-			if (map[y][x] == 'S')
+			if (game->map.points[y][x] == 'S')
 			{
-				data->x_pos = x * BLOCK_SIZE + BLOCK_SIZE / 2;
-				data->y_pos = y * BLOCK_SIZE + BLOCK_SIZE / 2;
-				data ->angle = PI / 2;
+				game->x_pos = x * BLOCK_SIZE + BLOCK_SIZE / 2;
+				game->y_pos = y * BLOCK_SIZE + BLOCK_SIZE / 2;
+				game ->angle = PI / 2;
 			}
 			x++;
 		}
@@ -162,87 +218,89 @@ void	get_player_position(t_data *data)
 	}
 }
 
-void	start_mlx(mlx_t *mlx, t_data *data)
+void	start_mlx(mlx_t *mlx, t_game *game)
 {
 	if (!mlx)
 		return ;
 	mlx_set_setting(MLX_STRETCH_IMAGE, true);
-	data->mlx = mlx;
-	data->image = mlx_new_image(mlx, WIDTH, HEIGHT);
-	if (!data->image)
+	game->mlx = mlx;
+	game->image = mlx_new_image(mlx, WIDTH, HEIGHT);
+	if (!game->image)
 		return ;
 }
 
-void	start_mlx2(mlx_t *mlx, t_data *data2)
-{
-	if (!mlx)
-		return ;
-	mlx_set_setting(MLX_STRETCH_IMAGE, true);
-	data2->mlx = mlx;
-	data2->image = mlx_new_image(mlx, WIDTH, HEIGHT);
-	if (!data2->image)
-		return ;
-}
-void get_map_size(t_data *data)
+
+void get_map_size(t_game *game)
 {
 	int x;
 	int y;
 
 	x = 0;
 	y = 0;
-	x = ft_strlen(map[0]);
-	while (map[y][0])
+
+	game->map_size_x = game ->map.width;
+	game->map_size_y = game ->map.height;
+	return ;
+	x = ft_strlen(game->map.points[0]);
+	while (game->map.points[y][0])
 	{
 		y++;
 	}
-	data->map_size_x = x - 1;
-	data->map_size_y = y;
+	return ;
+	game->map_size_x = x - 1;
+	game->map_size_y = y;
 }
 
 
 
-int32_t	main()
+
+
+int	main(int argc, char **argv)
 {
-	t_data	data;
-	t_data2	data2;
-	double	distances[60];
-	double angle;
-	int x= 0;
+	t_game	game;
 
-/* 	start_mlx2(mlx_init(WIDTH, HEIGHT, "game", true), &data2);
-	if (mlx_image_to_window(data2.mlx, data2.image, 0, 0) == -1)
+	if (argc != 2)
+		error("Error\nInvalid number of arguments. Usage: ./cub3D <filename.cub>");
+	if (check_cub_file(argv[1]) == 0)
+		error("Error\nInvalid file format");
+	init_values(&game);
+/* 	game.mlx_ptr = mlx_init(WIDTH, HEIGHT, "cub3d", false);
+	if (!game.mlx_ptr)
+		error("Error\nFailed to initialize MLX42");
+	game.win_ptr = mlx_new_image(game.mlx_ptr, WIDTH, HEIGHT);
+	if (!game.win_ptr || (mlx_image_to_window(game.mlx_ptr, game.win_ptr, 0, 0) < 0))
 	{
-		mlx_close_window(data2.mlx);
+		mlx_terminate(game.mlx_ptr);
+		error("Error\nFailed to create window");
+	} */
+
+	start_mlx(mlx_init(WIDTH, HEIGHT, "Cube", true), &game);
+	if (mlx_image_to_window(game.mlx, game.image, 0, 0) == -1)
+	{
+		mlx_close_window(game.mlx);
 		puts(mlx_strerror(mlx_errno));
 		return (1);
 	}
- */
-	get_map_size(&data);
-	get_player_position(&data);
-	start_mlx(mlx_init(WIDTH, HEIGHT, "Cube", true), &data);
-	if (mlx_image_to_window(data.mlx, data.image, 0, 0) == -1)
+	printf("Loading map: %s\n", argv[1]);
+	if (!parse_map(argv[1], &game))
 	{
-		mlx_close_window(data.mlx);
-		puts(mlx_strerror(mlx_errno));
-		return (1);
+		free_map(&game);
+		error("Error\nFailed to parse .cub file");
 	}
-	mlx_loop_hook(data.mlx, ft_hook, &data);
-	//printf("AAA");
-	//mlx_scroll_hook(data.mlx, &my_scrollhook, &data);
-	/* angle = data.angle - 30 * RAD;
-	while (x < 60)
-	{
-		distances[x] = calc_distance(&data, angle);
-		x ++;
-		angle += RAD;
-	}
-	mlx_loop(data2.mlx);
-	mlx_close_window(data2.mlx);
-	mlx_terminate(data2.mlx); */
-	mlx_loop(data.mlx);
-	mlx_close_window(data.mlx);
-	// mlx_delete_image(data.mlx, data.image);
-	mlx_terminate(data.mlx);
-	return (0);
+	printf("Map loaded succesfully!\n");
+	print_game_state(&game);
+
+	get_map_size(&game);
+	get_player_position(&game);
+	//return (1);
+
+	mlx_loop_hook(game.mlx, ft_hook, &game);
+	//return (1);
+
+	mlx_loop(game.mlx);
+	mlx_close_window(game.mlx);
+	mlx_terminate(game.mlx);
+	free_map(&game);
+	printf("Map closed!\n");
+	return (EXIT_SUCCESS);
 }
-

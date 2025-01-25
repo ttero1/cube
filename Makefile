@@ -1,41 +1,48 @@
-NAME	:= cube
-CFLAGS	:= -Wextra -Wall -Wunreachable-code -Ofast
-#  -Werror
-LIBMLX	:= ./MLX42
+NAME = cub3D
 
-LIBFT = libft/libft.a
-HEADERS	:= -I ./include -I $(LIBMLX)/include
-LIBS	:= $(LIBMLX)/build/libmlx42.a -ldl -lglfw -pthread -lm  libft/libft.a
+SOURCES = main.c parse_map.c calculate.c  raycast.c movement.c
 
-SRCS 	:= main.c
-OBJS	:= ${SRCS:.c=.o}
+OBJECTS = $(SOURCES:.c=.o)
 
-all:$(NAME)
+BOBJECTS = $(BSOURCES:.c=.o) 
 
-libmlx:
-	@printf "✅\n"
-	@cmake $(LIBMLX) -B $(LIBMLX)/build && make -C $(LIBMLX)/build -j4
+LIBFT = ./libft/libft.a
 
-%.o: %.c
-	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS) && printf "Compiling: $(notdir $<)"
+MLX42 = ./MLX42/build/libmlx42.a
+
+CC = cc
+
+CFLAGS += -g -I./MLX42/include
+
+LDFLAGS = -L./MLX42/build -lmlx42 -ldl -lglfw -lm -lpthread
+
+RM = rm -f
+
+all: $(NAME)
 
 $(LIBFT):
-	@$(MAKE) -C libft > /dev/null
-	@sleep 0.25
+	$(MAKE) -C ./libft
 
-$(NAME): $(MLX) $(LIBFT) $(MLX) $(OBJS)
-	@make libmlx
-	@$(CC) $(OBJS) $(LIBS) $(HEADERS) -o $(NAME)
+$(MLX42):
+	cmake -S ./MLX42 -B ./MLX42/build
+	$(MAKE) -C ./MLX42/build
+
+$(NAME): $(OBJECTS) $(LIBFT) $(MLX42)
+	$(CC) $(OBJECTS) $(LIBFT) $(LDFLAGS) -o $(NAME)
+
+bonus: all 
+
+%.o : %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	@make clean -C ./libft
-	@rm -rf $(OBJS)
-	@rm -rf $(LIBMLX)/build
+	$(MAKE) clean -C ./libft
+	$(RM) $(OBJECTS)
 
 fclean: clean
-	@make fclean -C ./libft
-	@rm -rf $(NAME)
+	$(MAKE) fclean -C ./libft
+	$(RM) $(NAME)
 
-re: clean all
+re: fclean all
 
-.PHONY: all, clean, fclean, re, libmlx
+.PHONY: all bonus clean fclean re

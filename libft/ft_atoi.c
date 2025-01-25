@@ -1,42 +1,30 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ttero <ttero@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/24 14:35:58 by ttero             #+#    #+#             */
-/*   Updated: 2023/11/09 12:12:50 by ttero            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "libft.h"
 
 int	ft_atoi(const char *str)
 {
-	int	i;
-	int	flag;
-	int	res;
+	long long int	res;
+	long long int	temp;
+	int				s;
 
-	i = 0;
 	res = 0;
-	flag = 1;
-	while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
-		i++;
-	if (str[i] == '-')
+	s = 1;
+	while (*str && (*str == 32 || (*str >= 9 && *str <= 13)))
+		str++;
+	if (*str && (*str == '+' || *str == '-'))
 	{
-		flag *= -1;
-		i++;
+		if (*str == '-')
+			s = -s;
+		str++;
 	}
-	if (str[i] == '+' && flag == -1)
-		return (0);
-	if (str[i] == '+')
-		i++;
-	while (str[i] >= '0' && str[i] <= '9')
+	while (*str && (*str >= '0' && *str <= '9'))
 	{
-		res *= 10;
-		res += str[i] - '0';
-		i++;
+		temp = res;
+		res = res * 10 + s * (*str - '0');
+		if (temp > res && s > 0)
+			return (-1);
+		if (temp < res && s < 0)
+			return (0);
+		str++;
 	}
-	return (res * flag);
+	return (res);
 }

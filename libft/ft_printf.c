@@ -1,70 +1,54 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/27 13:30:38 by ttero             #+#    #+#             */
-/*   Updated: 2024/06/06 13:31:48 by ttero            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "libft.h"
 
-int	dis(va_list *va, char c)
+static int	typecheck(const char *format, va_list args, char *error_flag)
 {
-	if (c == 'd' || c == 'i')
-		return (ft_putnbr_mod(va_arg(*va, int)));
-	if (c == 'c')
-		return (ft_putchar(va_arg(*va, int)));
-	if (c == 's')
-		return (ft_putstr(va_arg(*va, char *)));
-	if (c == '%')
-		return (ft_putchar(c));
-	if (c == 'x')
-		return (ft_puthex(va_arg(*va, unsigned long)));
-	if (c == 'X')
-		return (ft_puthex_cap(va_arg(*va, unsigned long)));
-	if (c == 'u')
-		return (ft_put_unsig(va_arg(*va, unsigned int)));
-	if (c == 'p')
-		return (convert(va_arg(*va, void *)));
-	else
+	int	print;
+
+	print = 0;
+	if (*error_flag)
 		return (-1);
+	if (*format == 'c')
+		print += print_char(va_arg(args, int), error_flag);
+	else if (*format == 's')
+		print += print_str(va_arg(args, char *), error_flag);
+	else if (*format == 'p')
+		print += print_ptr(va_arg(args, unsigned long), error_flag);
+	else if (*format == 'd' || *format == 'i')
+		print += print_int(va_arg(args, int), error_flag);
+	else if (*format == 'u')
+		print += print_uint(va_arg(args, unsigned int), error_flag);
+	else if (*format == 'x' || *format == 'X')
+		print += print_hex(va_arg(args, unsigned int), format, error_flag);
+	else
+		print += print_char(*format, error_flag);
+	return (print);
 }
 
-int	ft_printf_loop(va_list *va, const char *s, int i, int j)
+int	ft_printf(const char *str, ...)
 {
-	int	k;
+	va_list	args;
+	int		print;
+	char	error_flag;
 
-	while (s[i])
+	print = 0;
+	error_flag = 0;
+	va_start(args, str);
+	while (*str)
 	{
-		if (s[i] == '%')
+		if (*str == '%')
 		{
-			k = dis(va, s[i + 1]);
-			i++;
+			str++;
+			if (*str == '%')
+				print += print_char('%', &error_flag);
+			else
+				print += typecheck(str, args, &error_flag);
 		}
 		else
-			k = ft_putchar(s[i]);
-		if (k < 0)
-			return (-1);
-		j = j + k;
-		i++;
+			print += print_char(*str, &error_flag);
+		str++;
 	}
-	return (j);
-}
-
-int	ft_printf(const char *s, ...)
-{
-	int		i;
-	va_list	va;
-	int		j;
-
-	i = 0;
-	j = 0;
-	va_start(va, s);
-	j = ft_printf_loop(&va, s, i, j);
-	va_end(va);
-	return (j);
+	va_end(args);
+	if (error_flag)
+		return (-1);
+	return (print);
 }

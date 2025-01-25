@@ -1,42 +1,29 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_memmove.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ttero <ttero@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/23 16:00:25 by ttero             #+#    #+#             */
-/*   Updated: 2023/11/09 12:14:49 by ttero            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "libft.h"
 
-void	*ft_memmove(void *str1, const void *str2, size_t n)
+void	*ft_memmove(void *dst, const void *src, size_t len)
 {
-	unsigned long	i;
-	char			*x;
-	char			*z;
+	char		*to;
+	const char	*from;
+	size_t		i;
 
-	x = (char *)str1;
-	z = (char *)str2;
+	to = (char *)dst;
+	from = (const char *)src;
+	if (!to && !from)
+		return (0);
 	i = 0;
-	if (str1 < str2)
+	if (to < from && len != 0)
 	{
-		while (i < n)
+		while (++i <= len)
 		{
-			x[i] = z[i];
-			i++;
+			to[i - 1] = from [i - 1];
 		}
 	}
-	if (str1 > str2)
+	else
 	{
-		i = n;
-		while (i > 0)
+		while (len-- > 0)
 		{
-			x[i - 1] = z[i - 1];
-			i--;
+			to[len] = from[len];
 		}
 	}
-	return (x);
+	return ((char *)dst);
 }

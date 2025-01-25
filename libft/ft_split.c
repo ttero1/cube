@@ -1,117 +1,106 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_split.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ttero <ttero@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/25 15:58:55 by ttero             #+#    #+#             */
-/*   Updated: 2023/11/09 12:15:16 by ttero            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "libft.h"
 
-static void	free_array(char **split, int x)
+static char	**ft_free(char **array)
 {
 	int	i;
 
 	i = 0;
-	while (i < x)
+	if (array)
 	{
-		free(split[i]);
-		i++;
-	}
-	free(split);
-}
-
-static int	len_word(char *str, char charset, int i)
-{
-	int	j;
-
-	j = 0;
-	i++;
-	while (str[i] && str[i] != charset)
-	{
-		i++;
-		j++;
-	}
-	j++;
-	return (j);
-}
-
-static int	word(char *str, char charset)
-{
-	int	i;
-	int	k;
-
-	i = 0;
-	k = 0;
-	while (str[i])
-	{
-		if (i == 0 && str[i] != charset)
+		while (array[i])
 		{
-			k++;
+			free(array[i]);
 			i++;
 		}
-		if ((str[i] != charset) && ((str[i - 1] == charset) || i == 0))
-		{
-			k++;
-		}
-		i++;
+		free(array);
 	}
-	return (k);
+	return (NULL);
 }
 
-static int	loop(char *str, char charset, char **split, int k)
+static size_t	ft_count(char const *s, char c)
 {
-	int	i;
-	int	z;
-	int	j;
+	int			len;
+	size_t		count;
+	int			i;
+	const char	*str;
+
+	len = ft_strlen(s);
+	i = 0;
+	count = 0;
+	str = (const char *)s;
+	while (i < len)
+	{
+		while (i < len && str[i] == c)
+			i++;
+		if (i < len && str[i] != c)
+			count++;
+		while (i < len && str[i] != c)
+			i++;
+	}
+	return (count);
+}
+
+static char	*ft_copy(char const *s, int start, int end)
+{
+	const char	*str;
+	char		*dest;
+	int			i;
+
+	str = (const char *)s;
+	dest = malloc((end - start + 1) * sizeof(char));
+	if (!dest)
+		return (NULL);
+	i = 0;
+	while (start < end)
+	{
+		dest[i] = str[start];
+		i++;
+		start++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
+
+static char	**ft_new_array(char **new_array, char const *s, char c)
+{
+	size_t		i;
+	size_t		j;
+	size_t		start;
 
 	i = 0;
-	z = 0;
 	j = 0;
-	while (z < k)
+	while (s[i] != '\0')
 	{
-		while (str[i] == charset)
-			i++;
-		j = len_word(str, charset, i);
-		split[z] = malloc(j + 1);
-		if (!(split[z]))
+		if (s[i] != c)
 		{
-			free_array(split, z);
-			return (0);
+			start = i;
+			while (s[i] != '\0' && s[i] != c)
+				i++;
+			new_array[j] = ft_copy(s, start, i);
+			if (!new_array[j])
+			{
+				return (ft_free(new_array));
+			}
+			j++;
 		}
-		ft_strlcpy(split[z], str + i, j + 1);
-		i = i + j;
-		z++;
+		else
+			i++;
 	}
-	return (1);
+	new_array[j] = NULL;
+	return (new_array);
 }
 
 char	**ft_split(char const *s, char c)
 {
-	char	**split;
-	int		i;
-	int		k;
+	char		**new_array;
+	size_t		count;
 
-	i = 0;
-	k = 0;
-	split = malloc((word((char *)s, c) + 1) * sizeof(char *));
-	if (!split)
+	if (!s)
+		return (0);
+	count = ft_count(s, c);
+	new_array = malloc((count + 1) * sizeof(char *));
+	if (!new_array)
 		return (NULL);
-	if (word((char *)s, c) == 0)
-	{
-		split[0] = NULL;
-		return (split);
-	}
-	if (!(split))
-		return (NULL);
-	i = loop((char *)s, c, split, word((char *)s, c));
-	if (i == 0)
-		return (NULL);
-	k = word((char *)s, c);
-	split[k] = 0;
-	return (split);
+	new_array = ft_new_array(new_array, s, c);
+	return (new_array);
 }

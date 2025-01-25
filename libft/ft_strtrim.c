@@ -1,77 +1,62 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_strtrim.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ttero <ttero@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/25 16:00:27 by ttero             #+#    #+#             */
-/*   Updated: 2023/11/09 12:16:25 by ttero            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "libft.h"
 
-static int	forward(char const *s1, char const *set)
+static	int	ft_is_set(char c, char const *set)
 {
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	while (set[j] && s1[i])
+	while (*set)
 	{
-		if (s1[i] == set[j])
-		{
-			i++;
-			j = -1;
-		}
-		j++;
+		if (*set == (unsigned char)c)
+			return (1);
+		set++;
 	}
-	return (i);
+	return (0);
 }
 
-static int	backward(char const *s1, char const *set)
+static int	ft_start(char const *s1, char const *set)
 {
-	int		j;
-	int		z;
+	unsigned int	start;
 
-	j = 0;
-	z = ft_strlen((char *)s1) - 1;
-	while (set[j] && z >= 0)
-	{
-		if (s1[z] == set[j])
-		{
-			z--;
-			j = -1;
-		}
-		j++;
-	}
-	return (z);
+	start = 0;
+	while (s1[start] != '\0' && ft_is_set(s1[start], set))
+		start++;
+	return (start);
+}
+
+static int	ft_end(char const *s1, char const *set)
+{
+	unsigned int	end;
+	unsigned int	start;
+
+	end = 0;
+	start = ft_start(s1, set);
+	while (s1[end] != '\0')
+		end++;
+	while ((end > start) && ft_is_set(s1[end - 1], set))
+		end--;
+	return (end);
 }
 
 char	*ft_strtrim(char const *s1, char const *set)
 {
-	int		i;
-	int		z;
-	char	*arr;
+	unsigned int	len;
+	unsigned int	i;
+	char			*new_string;
+	unsigned int	start;
+	unsigned int	end;
 
-	if (ft_strlen(set) == 0)
+	if (!set || !s1)
+		return (0);
+	start = ft_start(s1, set);
+	end = ft_end(s1, set);
+	len = end - start;
+	new_string = malloc((len + 1) * sizeof(char));
+	if (!new_string)
+		return (0);
+	i = 0;
+	while (len > i)
 	{
-		arr = ft_strdup((char *)s1);
-		return (arr);
+		new_string[i] = s1[start + i];
+		i++;
 	}
-	z = ft_strlen((char *)s1) - 1;
-	i = forward (s1, set);
-	z = backward(s1, set);
-	if (z <= 0)
-	{
-		arr = malloc(1);
-		if (!arr)
-			return (NULL);
-		arr[0] = '\0';
-		return (arr);
-	}
-	arr = ft_substr(s1, i, z - i + 1);
-	return (arr);
+	new_string[len] = '\0';
+	return (new_string);
 }

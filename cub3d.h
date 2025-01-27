@@ -16,6 +16,7 @@
 # define RAD 0.01745329251
 
 
+
 typedef enum e_wall
 {
 	NORTH,
@@ -31,6 +32,8 @@ typedef struct s_raycast
 	double x_pos_ray;
 	double y_pos_ray;
 	int		hit_wall;
+	double	ray_dir_y;
+	double	ray_dir_x;
 }				t_raycast;
 
 
@@ -71,6 +74,14 @@ typedef struct	s_game
 	int			map_size_x;
 	double 		distance;
 	t_raycast   *raycast;
+	mlx_texture_t	*north_wall;
+	mlx_texture_t	*west_wall;
+	mlx_texture_t	*east_wall;
+	mlx_texture_t	*south_wall;
+	mlx_image_t		*north_wall_img;
+	mlx_image_t		*south_wall_img;
+	mlx_image_t		*west_wall_img;
+	mlx_image_t		*east_wall_img;
 
 	mlx_image_t	*image;
 }	t_game;
@@ -134,6 +145,7 @@ void draw_ceiling(t_game *game, int start, int x);
 void draw_floor(t_game *game, int end, int x);
 void draw_view(t_game *game, double distances[60]);
 void ft_hook(void *param);
+void load_texture(t_game *game);
 
 
 

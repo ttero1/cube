@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 18:59:02 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/25 13:23:14 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/27 22:48:10 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ bool check_wall2(int x, int y, t_game *game)
 	{
 		//printf("EEE");
 		return true;
-	} 
+	}
 	return (false);
 }
 
@@ -161,11 +161,11 @@ void cast_rays (t_game *game, t_raycast *raycast, double angle)
 		if (angle <= PI / 2 || angle >= PI * 1.5)
 			{
 			if (x_dis == 0)
-				x_dis += 0.1;
+				x_dis += 0.01;
 			}
 		else
 			if (x_dis == 0)
-				x_dis -= 0.1;
+				x_dis -= 0.01;
 		raycast->distance += fabs(x_dis);
 		raycast->x_pos_ray += fabs(x_dis) * cos(angle);
 		raycast->y_pos_ray +=fabs(x_dis) * sin(angle);
@@ -182,10 +182,10 @@ void cast_rays (t_game *game, t_raycast *raycast, double angle)
 	{
 		if (angle <= PI)
 			if (y_dis == 0)
-				y_dis += 0.1;
+				y_dis += 0.01;
 		if (angle > PI)
 			if (y_dis == 0)
-				y_dis -= 0.1;
+				y_dis -= 0.01;
 		//printf("\n%f\n\n", raycast->y_pos_ray);
 		raycast->distance += fabs(y_dis);
 		raycast->x_pos_ray += fabs(y_dis) * cos(angle);
@@ -214,7 +214,7 @@ t_raycast calc_distance(t_game *game, double angle)
 	raycast.hit_wall = -1;
 
 	//cast_rays(game, &raycast);
-	//printf ("\n\n %f    %f    %f", raycast.x_pos_ray, raycast.y_pos_ray, angle); 
+	//printf ("\n\n %f    %f    %f", raycast.x_pos_ray, raycast.y_pos_ray, angle);
 	 while (raycast.hit_wall == -1 && raycast.distance < 8 * BLOCK_SIZE)
 	{
 		cast_rays(game, &raycast, angle);
@@ -230,6 +230,9 @@ t_raycast calc_distance(t_game *game, double angle)
 	if (fisheye < 0)
 		fisheye += 2 * PI;
 	raycast.distance = raycast.distance * cos(fisheye);
+	raycast.ray_dir_x = sin(angle) ;
+	raycast.ray_dir_y = cos(angle) ;
+	//printf ("%f              %f     %f\n", raycast.ray_dir_x, raycast.ray_dir_y, raycast.distance);
 	//printf("%f\n", game->distance);
 	return (raycast);
 }

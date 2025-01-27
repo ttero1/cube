@@ -272,6 +272,22 @@ void get_map_size(t_game *game)
 }
 
 
+void load_texture(t_game *game)
+{
+	game->north_wall = mlx_load_png(game->map.no_text);
+	game->south_wall = mlx_load_png(game->map.so_text);
+	game->east_wall = mlx_load_png(game->map.ea_text);
+	game->west_wall = mlx_load_png(game->map.we_text);
+	if (game->north_wall == NULL || game->south_wall == NULL ||game->east_wall == NULL ||game->west_wall == NULL )
+	{
+		exit;
+	}
+	game->north_wall_img = mlx_texture_to_image(game->mlx, game->north_wall);
+	game->south_wall_img = mlx_texture_to_image(game->mlx, game->south_wall);
+	game->east_wall_img = mlx_texture_to_image(game->mlx, game->east_wall);
+	game->west_wall_img = mlx_texture_to_image(game->mlx, game->west_wall);
+}
+
 
 
 
@@ -310,6 +326,7 @@ int	main(int argc, char **argv)
 	}
 	printf("Map loaded succesfully!\n");
 	print_game_state(&game);
+	load_texture(&game);
 
 	get_map_size(&game);
 	get_player_position(&game);

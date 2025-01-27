@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 19:08:55 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/25 13:29:24 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/27 21:25:21 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,15 +120,15 @@ void	ft_hook(void *param)
 	int x= 0;
 	angle = game->angle - 30 * RAD;
 
-	game->raycast = malloc(60 * sizeof(t_raycast));
+	game->raycast = malloc(WIDTH * sizeof(t_raycast));
 	//return ;
-	while (x < 60)
+	while (x < WIDTH)
 	{
 		game->raycast[x] = calc_distance(game, angle);
 		//distances[x] = calc_distance(game, angle);
 		//printf("%f\n",  game->raycast[x].distance);
 		x ++;
-		angle += RAD;
+		angle += ((double)60 * RAD/ WIDTH) ;
 	}
 
 	x = 0;

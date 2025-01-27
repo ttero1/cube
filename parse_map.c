@@ -257,7 +257,7 @@ int	validate_map(t_game *game)
 		y++;
 	}
 	x = 0;
-	if (!space_top)
+	if (space_top)
 	{
 		while (map[0][x] == ' ')
 			x++;
@@ -272,7 +272,7 @@ int	validate_map(t_game *game)
 		}
 	}
 	x = 0;
-	if (!space_bottom)
+	if (space_bottom)
 	{
 		while (map[game->map.height - 1][x] == ' ')
 			x++;
@@ -334,10 +334,14 @@ int	count_map_rows(const char *file)
 	count = 0;
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
+	{
+		printf("Could not open file %s\n", file);
 		return (-1);
+	}
 	line = get_next_line(fd);
 	if (!line)
 	{
+		printf("File %s is empty\n", file);
 		close(fd);
 		return (0);
 	}
@@ -353,7 +357,7 @@ int	count_map_rows(const char *file)
 	return(count);
 }
 
-int	init_map(t_map *map)
+/*int	init_map(t_map *map)
 {
 	map->points = NULL;
 	map->width = 0;
@@ -381,7 +385,7 @@ void	init_player(t_player *player)
 	player->x = -1;
 	player->y = -1;
 	player->player_pos = '\0';
-}
+}*/
 
 int	parse_map(const char *file, t_game *game)
 {
@@ -408,9 +412,9 @@ int	parse_map(const char *file, t_game *game)
 	}
 	row = 0;
 	map = 0;
-	if (!init_map(&game->map))
-		return (0);
-	init_player(&game->player);
+	//if (!init_map(&game->map))
+	//	return (0);
+	//init_player(&game->player);
 	game->map.points = malloc((malloc_size + 1) * sizeof(char *));
 	if (!game->map.points)
 		return (0);

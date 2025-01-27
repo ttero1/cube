@@ -200,13 +200,13 @@ int	validate_map(t_game *game)
 	int		row_len;
 	int		next_row_len;
 	int		prev_row_len;
-	int		space_top;
-	int		space_bottom;
+	//int		space_top;
+	//int		space_bottom;
 
 	map = game->map.points;
 	y = 0;
-	space_top = 0;
-	space_bottom = 0;
+	//space_top = 0;
+	//space_bottom = 0;
 	while (y < game->map.height)
 	{
 		x = 0;
@@ -227,10 +227,10 @@ int	validate_map(t_game *game)
 		{
 			if (map[y][x] == ' ')
 			{
-				if (map[0][x])
-					space_top = 1;
-				if (map[game->map.height - 1][x])
-					space_bottom = 1;
+				//if (map[0][x])
+				//	space_top = 1;
+				//if (map[game->map.height - 1][x])
+				//	space_bottom = 1;
 				if (x > 0 && map[y][x - 1] != '1' && map[y][x - 1] != ' ')
 				{
 					printf("In left space not surrounded by wall\n");
@@ -257,34 +257,28 @@ int	validate_map(t_game *game)
 		y++;
 	}
 	x = 0;
-	if (space_top)
+	while (map[0][x] == ' ')
+		x++;
+	while (x < ft_strlen(map[0]))
 	{
-		while (map[0][x] == ' ')
-			x++;
-		while (x < ft_strlen(map[0]))
+		if (map[0][x] != '1')
 		{
-			if (map[0][x] != '1')
-			{
-				printf("Top row not fully walled, in %d\n", x);
-				return (0);
-			}
-			x++;
+			printf("Top row not fully walled, in %d\n", x);
+			return (0);
 		}
+		x++;
 	}
 	x = 0;
-	if (space_bottom)
+	while (map[game->map.height - 1][x] == ' ')
+		x++;
+	while (x < ft_strlen(map[game->map.height - 1]))
 	{
-		while (map[game->map.height - 1][x] == ' ')
-			x++;
-		while (x < ft_strlen(map[game->map.height - 1]))
+		if (map[game->map.height - 1][x] != '1')
 		{
-			if (map[game->map.height - 1][x] != '1')
-			{
-				printf("Bottom row not fully walled, in %d\n", x);
-				return (0);
-			}
-			x++;
+			printf("Bottom row not fully walled, in %d\n", x);
+			return (0);
 		}
+		x++;
 	}
 	return (1);
 }

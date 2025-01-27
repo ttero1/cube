@@ -87,17 +87,27 @@ int		search_char(char *s, int c);
 int		check_valid_char(char *line);
 int		validate_player_position(t_game *game);
 int		check_png_file(char *file);
+int		no_text(char *line, t_game *game);
+int		so_text(char *line, t_game *game);
+int		we_text(char *line, t_game *game);
+int		ea_text(char *line, t_game *game);
+int		floor_color(char *line, t_game *game);
+int		ceiling_color(char *line, t_game *game);
 int		parse_element(char *line, t_game *game);
+void	free_rgb(char **rgb);
 int		parse_color(char *line, int *color);
+int		validate_row_edges(char *row, int row_index);
+int		validate_row_spaces(char **map, int y, int x, t_game *game);
+int		validate_top_and_bottom(char **map, t_game *game);
 int		validate_map(t_game *game);
 void	trim_newline(char *line);
 int		save_line(char *line, t_game *game, int row);
 int		count_map_rows(const char *file);
-//int		init_map(t_map *map);
-//void	init_player(t_player *player);
+int		init_map(const char *file, t_game *game);
+int		process_content(char *line, t_game *game, int *row, int *map);
+int		process_map(char *line, t_game *game, int fd, int *row);
+int		finalize_map(t_game *game, int row);
 int		parse_map(const char *file, t_game *game);
-
-
 
 
 

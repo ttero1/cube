@@ -70,15 +70,35 @@ void	free_map(t_game *game)
 		free(game->map.ceiling_color);
 }
 
-void	init_values(t_game *game)
+int	init_values(t_game *game)
 {
 	game->mlx_ptr = 0;
 	game->win_ptr = 0;
+
+	game->map.points = NULL;
+	game->map.width = 0;
+	game->map.height = 0;
+	game->map.no_text = NULL;
+	game->map.so_text = NULL;
+	game->map.we_text = NULL;
+	game->map.ea_text = NULL;
+	game->map.floor_color = malloc(3 * sizeof(int));
+	if (!game->map.floor_color)
+		return (0);
+	game->map.ceiling_color = malloc(3 * sizeof(int));
+	if (!game->map.ceiling_color)
+	{
+		free(game->map.floor_color);
+		return (0);
+	}
+	game->map.floor_color[0] = -1;
+	game->map.ceiling_color[0] = -1;
+
+	game->player.x = -1;
+	game->player.y = -1;
+	game->player.player_pos = '\0';
+	return (1);
 }
-
-
-
-
 
 
 
@@ -263,7 +283,8 @@ int	main(int argc, char **argv)
 		error("Error\nInvalid number of arguments. Usage: ./cub3D <filename.cub>");
 	if (check_cub_file(argv[1]) == 0)
 		error("Error\nInvalid file format");
-	init_values(&game);
+	if (!init_values(&game))
+		error("Error\nFailed to initialize values");
 /* 	game.mlx_ptr = mlx_init(WIDTH, HEIGHT, "cub3d", false);
 	if (!game.mlx_ptr)
 		error("Error\nFailed to initialize MLX42");

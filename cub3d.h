@@ -80,7 +80,7 @@ void	error(char *error_message);
 void	print_game_state(t_game *game);
 int		check_cub_file(const char *file);
 void	free_map(t_game *game);
-void	init_values(t_game *game);
+int		init_values(t_game *game);
 
 /* parse_map.c */
 int		search_char(char *s, int c);
@@ -93,8 +93,8 @@ int		validate_map(t_game *game);
 void	trim_newline(char *line);
 int		save_line(char *line, t_game *game, int row);
 int		count_map_rows(const char *file);
-int		init_map(t_map *map);
-void	init_player(t_player *player);
+//int		init_map(t_map *map);
+//void	init_player(t_player *player);
 int		parse_map(const char *file, t_game *game);
 
 

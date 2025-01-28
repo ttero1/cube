@@ -265,8 +265,8 @@ int	validate_map(t_game *game)
 	{
 		x = 0;
 		row_len = ft_strlen(map[y]);
-		while (x < row_len && map[y][x] == ' ')
-			x++;
+		//while (x < row_len && map[y][x] == ' ')
+		//	x++;
 		if (!validate_row_edges(map[y], y))
 			return (0);
 		while (x < row_len)
@@ -454,9 +454,9 @@ int	init_map(const char *file, t_game *game)
 
 int	process_content(char *line, t_game *game, int *row, int *map)
 {
-	while (!*map && *line == ' ')
+	while ((game->map.floor_color[0] == -1 || game->map.ceiling_color[0] == -1 || !game->map.no_text || !game->map.so_text || !game->map.we_text || !game->map.ea_text) &&  *line == ' ')
 		line++;
-	if (game->map.floor_color[0] != -1 && game->map.ceiling_color[0] != -1)
+	if (game->map.floor_color[0] != -1 && game->map.ceiling_color[0] != -1 && game->map.no_text && game->map.so_text && game->map.we_text && game->map.ea_text)
 	{
 		if (!check_valid_char(line))
 			return (0);

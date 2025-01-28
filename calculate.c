@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 18:59:02 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/27 22:48:10 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/28 12:25:50 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ bool check_wall2(int x, int y, t_game *game)
 {
 	//printf("%d   %d\n", y, x);
 	//x = x -1;
-	if (game->map.points[y][x] == '1')
+	if (game->map.points[y][x] == '1' || game->map.points[y][x] == ' ')
 	{
 		//printf("EEE");
 		return true;

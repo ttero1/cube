@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 18:58:18 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/27 22:54:04 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/28 11:19:24 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ double calculate_start(int x, double distances[60], t_game *game)
 	//height = HEIGHT / distances[x];
 	height = HEIGHT / game->raycast[x].distance;
 	start = HEIGHT / 2 - height / 2;
-	if (start < 0)
-		start = 0;
+	//if (start < 0)
+	//	start = 0;
 	return (start);
 }
 
@@ -35,8 +35,8 @@ double calculate_end(int x, double distances[60], t_game *game)
 	//height = HEIGHT / distances[x];
 	height = HEIGHT / game->raycast[x].distance;
 	end = HEIGHT / 2 + height / 2;
-	if (end > HEIGHT)
-		end =  HEIGHT - 1;
+	//if (end > HEIGHT)
+	//	end =  HEIGHT - 1;
 	return (end);
 }
 
@@ -64,6 +64,9 @@ void draw_ceiling(t_game *game, int start, int x)
 	game->map.ceiling_color[2],
 	255);
 
+	if (start < 0)
+		start = 0;
+
 	while (start > 1)
 	{
 		mlx_put_pixel(game->image, x, start, color);
@@ -71,30 +74,6 @@ void draw_ceiling(t_game *game, int start, int x)
 	}
 }
 
-/*  void draw_walls(t_game *game, int start, int end, int x, int wall)
-{
-	uint32_t	color;
-	int y;
-
-	color = ft_pixel( 0, 100, 100, 255 );
-	if (game->raycast[wall].hit_wall == NORTH)
-		color = ft_pixel( 0, 100, 100, 255 );
-	if (game->raycast[wall].hit_wall == SOUTH)
-		//color = ft_pixel( 0, 100, 100, 255 );
-		color = ft_pixel( 200, 100, 100, 255 );
-	if (game->raycast[wall].hit_wall == EAST)
-		color = ft_pixel( 150, 50, 100, 255 );
-	if (game->raycast[wall].hit_wall == WEST)
-		color = ft_pixel( 100, 100, 200, 255 );
-	y = 0;
-	//color = ft_pixel( 0, 100, 100, 255 );
-	while (start + y < end)
-	{
-		mlx_put_pixel(game->image, x, start + y, color);
-		y++;
-	}
-}
- */
 
 static int get_rgba(int r, int g, int b, int a)
 {
@@ -119,10 +98,17 @@ int32_t mlx_get_pixel(mlx_image_t* image, uint32_t x, uint32_t y) {
 {
     int y = 0;
     int texture_x, texture_y;
-    double wall_height = end - start;
-    double texture_step = (double)TEXTURE_HEIGHT / fmax(wall_height, 1);
-	double texture_pos = 0;
+ 	double wall_height = end - start;
+    double texture_step = (double)TEXTURE_HEIGHT / wall_height;
+    double texture_pos = 0;
 
+    if (start < 0) {
+        texture_pos = -start * texture_step;
+        start = 0;
+    }
+    if (end >= HEIGHT) {
+        end = HEIGHT - 1;
+    }
 
 	mlx_image_t *texture;
 	if (game->raycast[wall].hit_wall == NORTH)
@@ -141,21 +127,9 @@ int32_t mlx_get_pixel(mlx_image_t* image, uint32_t x, uint32_t y) {
         wall_x = game->x_pos + game->raycast[wall].distance * game->raycast[wall].ray_dir_x;
 
 
-	/* if (wall == 399)
-	{
-		printf("%f  %f   %f    %f\n", game->y_pos, game->raycast[wall].distance, game->raycast[wall].ray_dir_y, wall_x);
-	} */
+
 	wall_x -= floor(wall_x);
-	if (wall_x > 0.99)
-		wall_x = 0;
-	//printf("%d     %f\n",wall,  wall_x);
     texture_x = (int)(wall_x * TEXTURE_WIDTH);
-	//printf("%d\n\n", texture_x);
-	/* if (wall == 399)
-	{
-		printf("%f  %f   %f    %f\n\n", game->y_pos, game->raycast[wall].distance, game->raycast[wall].ray_dir_y, wall_x);
-	} */
-	//printf("Wall: %d, Wall X: %f, Texture X: %d\n", wall, wall_x, texture_x);
 
     if (((game->raycast[wall].hit_wall == NORTH || game->raycast[wall].hit_wall == SOUTH) && game->raycast[wall].ray_dir_x > 0) ||
         ((game->raycast[wall].hit_wall == EAST || game->raycast[wall].hit_wall == WEST)&& game->raycast[wall].ray_dir_y < 0))
@@ -165,6 +139,7 @@ int32_t mlx_get_pixel(mlx_image_t* image, uint32_t x, uint32_t y) {
     while (start + y < end)
     {
         texture_y = (int)texture_pos % TEXTURE_HEIGHT;
+		//texture_y = texture_pos;
 		//printf("      %d\n", texture_y);
         uint32_t color = mlx_get_pixel(texture, texture_x, texture_y);
         mlx_put_pixel(game->image, x, start + y, color);
@@ -182,6 +157,8 @@ void draw_floor(t_game *game, int end, int x)
 	game->map.floor_color[2],
 	255);
 	//return ;
+	if (end > HEIGHT)
+		end =  HEIGHT - 1;
 	while (end < HEIGHT - 1)
 	{
 		mlx_put_pixel(game->image, x, end, color);
@@ -197,24 +174,22 @@ void draw_view(t_game *game, double distances[60])
     double start, end;
 
     x = 0;
-    while (x < WIDTH) // Loop through all vertical slices
+    while (x < WIDTH)
     {
-        // Calculate start and end of the wall slice for the current ray
+
         start = calculate_start(x, distances, game);
         end = calculate_end(x, distances, game);
 
-        // Draw ceiling
+
         draw_ceiling(game, (int)start, x * (WIDTH / WIDTH));
 
-        // Draw wall slice (single call, no fragmentation)
+
         draw_walls(game, (int)start, (int)end, x * (WIDTH / WIDTH), x);
 
-        // Draw floor
         draw_floor(game, (int)end, x * (WIDTH / WIDTH));
 
         x++;
     }
 
-    // Draw the map overlay
     draw_map(game);
 }

@@ -25,6 +25,17 @@ typedef enum e_wall
 	WEST,
 }					t_wall;
 
+typedef struct s_texture
+{
+    double      texture_step;
+    double      texture_pos;
+    mlx_image_t *texture;
+    int         texture_x;
+} t_texture;
+
+
+
+
 
 typedef struct s_raycast
 {
@@ -146,7 +157,6 @@ void draw_floor(t_game *game, int end, int x);
 void draw_view(t_game *game, double distances[60]);
 void ft_hook(void *param);
 void load_texture(t_game *game);
-
 
 
 #endif

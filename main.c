@@ -173,7 +173,7 @@ void	draw_map(t_game *game)
 	y = 0;
 	while (y < game->map_size_y)
 	{
-		while (x < game->map_size_x)
+		while (x < ft_strlen(game->map.points[y]))
 		{
 			if (game->map.points[y][x] == '1')
 			{
@@ -205,7 +205,7 @@ void	get_player_position(t_game *game)
 	//game->map_size_y = 10;
 	while (y < game->map_size_y)
 	{
-		while (x < game->map_size_x)
+		while (x < ft_strlen(game->map.points[y]))
 		{
 			if (game->map.points[y][x] == 'W')
 			{

@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 19:08:55 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/29 09:07:29 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/29 09:13:18 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,10 @@ static void	mouse_pos(t_game *game)
 	int32_t	y;
 
 	mlx_get_mouse_pos(game->mlx, &x, &y);
+	if (x < 0)
+		x = 0;
+	else if (x > WIDTH)
+		x = WIDTH;
 	if (x > game->mouse_x)
 	{
 		game->angle += SPEED_RAD;

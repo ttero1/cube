@@ -6,12 +6,11 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 19:08:55 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/29 12:40:28 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/29 13:16:07 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
 
 void	perform_raycasting(t_game *game)
 {

@@ -6,12 +6,11 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 11:34:24 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/29 12:00:31 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/29 13:09:57 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
 
 int32_t	ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a)
 {

@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 11:31:41 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/29 12:40:59 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/29 13:18:17 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	draw_wall_slice(t_game *game, int start, int x,
 	int			y;
 	int			texture_y;
 	uint32_t	color;
-	int 		end;
+	int			end;
 
 	y = 0;
 	end = texture ->wall_height + start;
@@ -56,7 +56,8 @@ void	draw_walls(t_game *game, int start, int end, int wall)
 
 	texture.wall_height = end - start;
 	texture.texture = select_texture(game, wall);
-	texture.texture_step = (double)texture.texture->height / texture.wall_height;
+	texture.texture_step = (double)texture.texture->height
+		/ texture.wall_height;
 	texture.texture_pos = 0;
 	if (start < 0)
 	{
@@ -86,9 +87,10 @@ void	draw_floor(t_game *game, int end, int x)
 
 void	draw_view(t_game *game)
 {
-	int	x;
+	int		x;
+	double	start;
+	double	end;
 
-	double start, end;
 	x = 0;
 	while (x < WIDTH)
 	{

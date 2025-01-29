@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validate_map.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjaakkol <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 10:50:26 by mjaakkol          #+#    #+#             */
-/*   Updated: 2025/01/29 12:16:04 by mjaakkol         ###   ########.fr       */
+/*   Updated: 2025/01/29 12:46:55 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int	validate_player_position(t_game *game)
 		return (0);
 	return (1);
 }
-
 int	validate_row_edges(char *row)
 {
 	int	len;
@@ -33,7 +32,6 @@ int	validate_row_edges(char *row)
 		return (0);
 	return (1);
 }
-
 int	validate_row_spaces(char **map, int y, int x, t_game *game)
 {
 	int	row_len;
@@ -61,7 +59,6 @@ int	validate_row_spaces(char **map, int y, int x, t_game *game)
 		return (0);
 	return (1);
 }
-
 int	validate_top_and_bottom(char **map, t_game *game)
 {
 	int	x;
@@ -90,7 +87,6 @@ int	validate_top_and_bottom(char **map, t_game *game)
 	}
 	return (1);
 }
-
 int	validate_map(t_game *game)
 {
 	char	**map;

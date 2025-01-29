@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 11:30:50 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/29 12:17:59 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/29 13:08:53 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ double	calc_y_distance2(t_game *game, t_raycast *raycast, double angle)
 	if (angle <= PI)
 		delta_y = raycast->y_pos_ray - (y + 1) * BLOCK_SIZE;
 	else
-		delta_y = (y)*BLOCK_SIZE - raycast->y_pos_ray;
+		delta_y = (y) * BLOCK_SIZE - raycast->y_pos_ray;
 	dis = delta_y / sin(angle);
 	if (angle <= PI)
 		if (dis == 0)
@@ -55,7 +55,7 @@ double	calc_x_distance2(t_game *game, t_raycast *raycast, double angle)
 	if (angle <= PI / 2 || angle >= PI * 1.5)
 		delta_x = raycast->x_pos_ray - (x + 1) * BLOCK_SIZE;
 	else
-		delta_x = (x)*BLOCK_SIZE - raycast->x_pos_ray;
+		delta_x = (x) * BLOCK_SIZE - raycast->x_pos_ray;
 	dis = delta_x / cos(angle);
 	if (angle <= PI / 2 || angle >= PI * 1.5)
 	{

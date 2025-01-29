@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 18:58:18 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/29 12:40:07 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/29 13:12:45 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ double	calculate_wall_x(t_game *game, int wall)
 	return (wall_x - floor(wall_x));
 }
 
-int	calculate_texture_x(t_game *game, int wall, double wall_x, mlx_image_t *texture)
+int	calculate_texture_x(t_game *game, int wall, double wall_x,
+mlx_image_t *texture)
 {
 	int	texture_x;
 

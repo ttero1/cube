@@ -6,12 +6,11 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 11:36:24 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/29 11:58:52 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/29 13:12:27 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
 
 void	handle_movement_keys(t_game *game)
 {
@@ -53,7 +52,6 @@ void	handle_rotation_keys(t_game *game)
 	}
 }
 
-
 void	mouse_pos(t_game *game)
 {
 	int32_t	x;
@@ -74,4 +72,3 @@ void	mouse_pos(t_game *game)
 	}
 	game->mouse_x = x;
 }
-

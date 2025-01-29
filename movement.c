@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 19:08:55 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/29 09:13:18 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/29 11:09:45 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,12 +107,16 @@ void	perform_raycasting(t_game *game)
 
 	x = 0;
 	angle = game->angle - 30 * RAD;
+	if (angle <= 0)
+		angle += 2 * PI;
 	game->raycast = malloc(WIDTH * sizeof(t_raycast));
 	while (x < WIDTH)
 	{
 		game->raycast[x] = calc_distance(game, angle);
 		x++;
 		angle += ((double)60 * RAD / WIDTH);
+		if (angle >= 2 * PI)
+			angle -= 2 * PI;
 	}
 }
 
@@ -122,19 +126,15 @@ static void	mouse_pos(t_game *game)
 	int32_t	y;
 
 	mlx_get_mouse_pos(game->mlx, &x, &y);
-	if (x < 0)
-		x = 0;
-	else if (x > WIDTH)
-		x = WIDTH;
 	if (x > game->mouse_x)
 	{
-		game->angle += SPEED_RAD;
+		game->angle += SPEED_RAD * (x - game->mouse_x) / 15;
 		while (game->angle >= 2 * PI)
 			game->angle -= 2 * PI;
 	}
 	if (x < game->mouse_x)
 	{
-		game->angle -= SPEED_RAD;
+		game->angle -= SPEED_RAD * (game->mouse_x - x) / 15;
 		while (game->angle <= 0)
 			game->angle += 2 * PI;
 	}

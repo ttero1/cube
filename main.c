@@ -198,7 +198,11 @@ void	get_player_position(t_game *game)
 {
 	int	x;
 	int	y;
+	int32_t	mouse;
+	int32_t	mouse2;
 
+	mlx_get_mouse_pos(game->mlx, &mouse, &mouse2);
+	game->mouse_x = mouse;
 	x = 0;
 	y = 0;
 	game->x_pos = 0;
@@ -214,7 +218,6 @@ void	get_player_position(t_game *game)
 		x = 0;
 		y++;
 	}
-	game->mouse_x = 0;
 }
 
 void	start_mlx(mlx_t *mlx, t_game *game)

@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 18:59:02 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/28 18:16:27 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/29 11:10:00 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,6 @@ t_raycast	calc_distance(t_game *game, double angle)
 	t_raycast	raycast;
 	double		fisheye;
 
-	raycast.distance;
 	raycast.x_pos_ray = game->x_pos;
 	raycast.y_pos_ray = game->y_pos;
 	raycast.hit_wall = -1;

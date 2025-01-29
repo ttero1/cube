@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 18:58:18 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/29 14:50:00 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/29 21:45:25 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ double	calculate_wall_x(t_game *game, int wall)
 
 	if (game->raycast[wall].hit_wall == NORTH
 		|| game->raycast[wall].hit_wall == SOUTH)
-		wall_x = game->y_pos + game->raycast[wall].distance
+		wall_x = game->x_pos + game->raycast[wall].distance
 			* game->raycast[wall].ray_dir_y;
 	else
-		wall_x = game->x_pos + game->raycast[wall].distance
+		wall_x = game->y_pos + game->raycast[wall].distance
 			* game->raycast[wall].ray_dir_x;
 	return (wall_x - floor(wall_x));
 }

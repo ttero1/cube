@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 11:31:41 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/29 13:18:17 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/29 21:46:00 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ void	draw_walls(t_game *game, int start, int end, int wall)
 	wall_x = calculate_wall_x(game, wall);
 	texture.texture_x = calculate_texture_x(game, wall, wall_x,
 			texture.texture);
+	/* if (wall == WIDTH / 2)
+		printf("%d\n", texture.texture_x); */
 	draw_wall_slice(game, start, wall, &texture);
 }
 

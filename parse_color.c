@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_color.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjaakkol <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 10:43:09 by mjaakkol          #+#    #+#             */
-/*   Updated: 2025/01/29 10:43:29 by mjaakkol         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:12:09 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	free_rgb(char **rgb)
 int	parse_color(char *line, int *color)
 {
 	char	**rgb;
-	int		i;
 
 	rgb = ft_split(line, ',');
 	if (!rgb || !rgb[0] || !rgb[1] || !rgb[2] || rgb[3])

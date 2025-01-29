@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 11:30:50 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/29 13:08:53 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/29 15:08:44 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 bool	check_wall2(int x, int y, t_game *game)
 {
-	if (x >= ft_strlen(game->map.points[y]))
+	if (x >= (int)ft_strlen(game->map.points[y]))
 		return (true);
 	if (game->map.points[y][x] == '1' || game->map.points[y][x] == ' ')
 	{
@@ -23,7 +23,7 @@ bool	check_wall2(int x, int y, t_game *game)
 	return (false);
 }
 
-double	calc_y_distance2(t_game *game, t_raycast *raycast, double angle)
+double	calc_y_distance2(t_raycast *raycast, double angle)
 {
 	int		y;
 	double	delta_y;
@@ -45,7 +45,7 @@ double	calc_y_distance2(t_game *game, t_raycast *raycast, double angle)
 	return (dis);
 }
 
-double	calc_x_distance2(t_game *game, t_raycast *raycast, double angle)
+double	calc_x_distance2(t_raycast *raycast, double angle)
 {
 	int		x;
 	double	delta_x;

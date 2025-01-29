@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   parse_element.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjaakkol <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mjaakkol <mjaakkol@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 10:45:24 by mjaakkol          #+#    #+#             */
 /*   Updated: 2025/01/29 10:45:53 by mjaakkol         ###   ########.fr       */

@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 19:08:55 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/29 13:16:07 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/29 13:51:47 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,11 @@ void	perform_raycasting(t_game *game)
 	if (angle <= 0)
 		angle += 2 * PI;
 	game->raycast = malloc(WIDTH * sizeof(t_raycast));
+	if (game->raycast == NULL)
+	{
+		printf("Error\nMalloc error\n");
+		mlx_close_window(game->mlx);
+	}
 	while (x < WIDTH)
 	{
 		game->raycast[x] = calc_distance(game, angle);

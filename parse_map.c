@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   parse_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjaakkol <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mjaakkol <mjaakkol@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 10:29:35 by mjaakkol          #+#    #+#             */
 /*   Updated: 2025/01/29 10:56:24 by mjaakkol         ###   ########.fr       */

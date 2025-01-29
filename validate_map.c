@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 10:50:26 by mjaakkol          #+#    #+#             */
-/*   Updated: 2025/01/29 12:46:55 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/29 15:10:33 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	validate_player_position(t_game *game)
 		return (0);
 	return (1);
 }
+
 int	validate_row_edges(char *row)
 {
 	int	len;
@@ -32,6 +33,7 @@ int	validate_row_edges(char *row)
 		return (0);
 	return (1);
 }
+
 int	validate_row_spaces(char **map, int y, int x, t_game *game)
 {
 	int	row_len;
@@ -59,6 +61,7 @@ int	validate_row_spaces(char **map, int y, int x, t_game *game)
 		return (0);
 	return (1);
 }
+
 int	validate_top_and_bottom(char **map, t_game *game)
 {
 	int	x;
@@ -66,7 +69,7 @@ int	validate_top_and_bottom(char **map, t_game *game)
 	x = 0;
 	while (map[0][x] == ' ')
 		x++;
-	while (x < ft_strlen(map[0]))
+	while (x < (int)ft_strlen(map[0]))
 	{
 		while (map[0][x] == ' ')
 			x++;
@@ -77,7 +80,7 @@ int	validate_top_and_bottom(char **map, t_game *game)
 	x = 0;
 	while (map[game->map.height - 1][x] == ' ')
 		x++;
-	while (x < ft_strlen(map[game->map.height - 1]))
+	while (x < (int)ft_strlen(map[game->map.height - 1]))
 	{
 		while (map[game->map.height -1][x] == ' ')
 			x++;
@@ -87,6 +90,7 @@ int	validate_top_and_bottom(char **map, t_game *game)
 	}
 	return (1);
 }
+
 int	validate_map(t_game *game)
 {
 	char	**map;
@@ -105,18 +109,12 @@ int	validate_map(t_game *game)
 		while (x < row_len)
 		{
 			if (map[y][x] == ' ' && !validate_row_spaces(map, y, x, game))
-			{
-				printf("No wall or spave next to space\n");
 				return (0);
-			}
 			x++;
 		}
 		y++;
 	}
 	if (!validate_top_and_bottom(map, game))
-	{
-		printf("Top or bottom row not fully wall\n");
 		return (0);
-	}
 	return (1);
 }

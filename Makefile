@@ -1,6 +1,6 @@
 NAME = cub3D
 
-SOURCES = main.c parse_map.c parse_map_utils.c parse_color.c parse_element.c file_validation.c validate_map.c  calculate.c  raycast.c movement.c calculate_utils.c draw_functions.c draw_utils.c hooks.c check_walls.c
+SOURCES = main.c free_and_exit.c init_start.c init_start_values.c parse_map.c parse_map_utils.c parse_color.c parse_element.c file_validation.c validate_map.c  calculate.c  texture.c movement.c calculate_utils.c draw_functions.c draw_utils.c hooks.c check_walls.c draw_minimap.c
 
 OBJECTS = $(SOURCES:.c=.o)
 
@@ -12,7 +12,7 @@ MLX42 = ./MLX42/build/libmlx42.a
 
 CC = cc
 
-CFLAGS += -g -I./MLX42/include
+CFLAGS += -I./MLX42/include -Wall -Wextra -Werror 
 
 LDFLAGS = -L./MLX42/build -lmlx42 -ldl -lglfw -lm -lpthread
 

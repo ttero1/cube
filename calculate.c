@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 18:59:02 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/29 11:31:16 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/29 15:05:56 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ void	cast_rays(t_game *game, t_raycast *raycast, double angle)
 	double	x_dis;
 	double	y_dis;
 
-	x_dis = calc_x_distance2(game, raycast, angle);
-	y_dis = calc_y_distance2(game, raycast, angle);
+	x_dis = calc_x_distance2(raycast, angle);
+	y_dis = calc_y_distance2(raycast, angle);
 	if (fabs(x_dis) <= fabs(y_dis))
 	{
 		update_raycast_x(game, raycast, angle, x_dis);

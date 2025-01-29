@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 11:31:41 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/29 11:33:31 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/29 12:40:59 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	draw_floor(t_game *game, int end, int x)
 	}
 }
 
-void	draw_view(t_game *game, double distances[60])
+void	draw_view(t_game *game)
 {
 	int	x;
 
@@ -92,8 +92,8 @@ void	draw_view(t_game *game, double distances[60])
 	x = 0;
 	while (x < WIDTH)
 	{
-		start = calculate_start(x, distances, game);
-		end = calculate_end(x, distances, game);
+		start = calculate_start(x, game);
+		end = calculate_end(x, game);
 		draw_ceiling(game, (int)start, x);
 		draw_walls(game, (int)start, (int)end, x);
 		draw_floor(game, (int)end, x);

@@ -6,13 +6,13 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 18:58:18 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/29 12:02:53 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/29 12:40:07 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-double	calculate_start(int x, double distances[60], t_game *game)
+double	calculate_start(int x, t_game *game)
 {
 	double	height;
 	int		start;
@@ -22,7 +22,7 @@ double	calculate_start(int x, double distances[60], t_game *game)
 	return (start);
 }
 
-double	calculate_end(int x, double distances[60], t_game *game)
+double	calculate_end(int x, t_game *game)
 {
 	double	height;
 	int		end;
@@ -30,20 +30,6 @@ double	calculate_end(int x, double distances[60], t_game *game)
 	height = HEIGHT / game->raycast[x].distance;
 	end = HEIGHT / 2 + height / 2;
 	return (end);
-}
-
-double	calculate_step(int x, double distances[60], t_game *game)
-{
-	double	start;
-	double	start2;
-	double	step;
-
-	if (x == 59)
-		return (0);
-	start = calculate_start(x, distances, game);
-	start2 = calculate_start(x + 1, distances, game);
-	step = (start2 - start) / ((double)WIDTH / 60);
-	return (step);
 }
 
 mlx_image_t	*select_texture(t_game *game, int wall)

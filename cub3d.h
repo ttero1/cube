@@ -152,7 +152,7 @@ t_raycast calc_distance(t_game *game, double angle);
 
 void draw_ceiling(t_game *game, int start, int x);
 void draw_floor(t_game *game, int end, int x);
-void draw_view(t_game *game, double distances[60]);
+void draw_view(t_game *game);
 void ft_hook(void *param);
 void load_texture(t_game *game);
 
@@ -163,8 +163,7 @@ int32_t	mlx_get_pixel(mlx_image_t *image, uint32_t x, uint32_t y);
 int	calculate_texture_x(t_game *game, int wall, double wall_x, mlx_image_t *texture);
 double	calculate_wall_x(t_game *game, int wall);
 mlx_image_t	*select_texture(t_game *game, int wall);
-double	calculate_step(int x, double distances[60], t_game *game);
-double	calculate_end(int x, double distances[60], t_game *game);
-double	calculate_start(int x, double distances[60], t_game *game);
+double	calculate_end(int x, t_game *game);
+double	calculate_start(int x, t_game *game);
 
 #endif

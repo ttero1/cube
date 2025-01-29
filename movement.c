@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 19:08:55 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/29 11:38:45 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/29 12:40:28 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,6 @@ void	ft_hook(void *param)
 	handle_movement_keys(game);
 	handle_rotation_keys(game);
 	perform_raycasting(game);
-	draw_view(game, NULL);
+	draw_view(game);
 	free(game->raycast);
 }

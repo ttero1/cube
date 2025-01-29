@@ -275,18 +275,18 @@ int	main(int argc, char **argv)
 		error("Error\nInvalid file format");
 	if (!init_values(&game))
 		error("Error\nFailed to initialize values");
+	printf("Loading map: %s\n", argv[1]);
+	if (!parse_map(argv[1], &game))
+	{
+		free_map(&game);
+		error("Error\nFile not valid or failure happened in parsing");
+	}
 	start_mlx(mlx_init(WIDTH, HEIGHT, "Cube", true), &game);
 	if (mlx_image_to_window(game.mlx, game.image, 0, 0) == -1)
 	{
 		mlx_close_window(game.mlx);
 		puts(mlx_strerror(mlx_errno));
 		return (1);
-	}
-	printf("Loading map: %s\n", argv[1]);
-	if (!parse_map(argv[1], &game))
-	{
-		free_map(&game);
-		error("Error\nFailed to parse .cub file");
 	}
 	printf("Map loaded succesfully!\n");
 	print_game_state(&game);

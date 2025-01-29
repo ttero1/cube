@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 19:08:55 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/28 19:08:11 by ttero            ###   ########.fr       */
+/*   Updated: 2025/01/29 09:07:29 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,29 @@ void	perform_raycasting(t_game *game)
 	}
 }
 
+static void	mouse_pos(t_game *game)
+{
+	int32_t	x;
+	int32_t	y;
+
+	mlx_get_mouse_pos(game->mlx, &x, &y);
+	if (x > game->mouse_x)
+	{
+		game->angle += SPEED_RAD;
+		while (game->angle >= 2 * PI)
+			game->angle -= 2 * PI;
+	}
+	if (x < game->mouse_x)
+	{
+		game->angle -= SPEED_RAD;
+		while (game->angle <= 0)
+			game->angle += 2 * PI;
+	}
+	game->mouse_x = x;
+}
+
+
+
 void	ft_hook(void *param)
 {
 	t_game	*game;
@@ -123,6 +146,7 @@ void	ft_hook(void *param)
 	game = param;
 	if (mlx_is_key_down(game->mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(game->mlx);
+	mouse_pos(game);
 	handle_movement_keys(game);
 	handle_rotation_keys(game);
 	perform_raycasting(game);

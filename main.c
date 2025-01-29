@@ -226,6 +226,7 @@ void	get_player_position(t_game *game)
 		x = 0;
 		y++;
 	}
+	game->mouse_x = 0;
 }
 
 void	start_mlx(mlx_t *mlx, t_game *game)

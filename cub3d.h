@@ -84,7 +84,9 @@ typedef struct	s_game
 	int			map_size_y;
 	int			map_size_x;
 	double 		distance;
+	int32_t		mouse_x;
 	t_raycast   *raycast;
+
 	mlx_texture_t	*north_wall;
 	mlx_texture_t	*west_wall;
 	mlx_texture_t	*east_wall;

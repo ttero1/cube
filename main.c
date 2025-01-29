@@ -90,10 +90,6 @@ int	init_values(t_game *game)
 	return (1);
 }
 
-int32_t	ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a)
-{
-	return (r << 24 | g << 16 | b << 8 | a);
-}
 void	paint_block(t_game *game, int x, int y, int flag)
 {
 	int			z;
@@ -198,7 +194,11 @@ void	get_player_position(t_game *game)
 {
 	int	x;
 	int	y;
+	int32_t	mouse;
+	int32_t	mouse2;
 
+	mlx_get_mouse_pos(game->mlx, &mouse, &mouse2);
+	game->mouse_x = mouse;
 	x = 0;
 	y = 0;
 	game->x_pos = 0;
@@ -214,7 +214,6 @@ void	get_player_position(t_game *game)
 		x = 0;
 		y++;
 	}
-	game->mouse_x = 0;
 }
 
 void	start_mlx(mlx_t *mlx, t_game *game)

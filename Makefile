@@ -1,6 +1,6 @@
 NAME = cub3D
 
-SOURCES = main.c parse_map.c parse_map_utils.c parse_color.c parse_element.c file_validation.c validate_map.c  calculate.c  raycast.c movement.c
+SOURCES = main.c parse_map.c parse_map_utils.c parse_color.c parse_element.c file_validation.c validate_map.c  calculate.c  raycast.c movement.c calculate_utils.c draw_functions.c draw_utils.c hooks.c check_walls.c
 
 OBJECTS = $(SOURCES:.c=.o)
 

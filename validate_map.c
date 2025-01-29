@@ -6,7 +6,7 @@
 /*   By: mjaakkol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 10:50:26 by mjaakkol          #+#    #+#             */
-/*   Updated: 2025/01/29 10:57:35 by mjaakkol         ###   ########.fr       */
+/*   Updated: 2025/01/29 12:16:04 by mjaakkol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	validate_player_position(t_game *game)
 	return (1);
 }
 
-int	validate_row_edges(char *row, int row_index)
+int	validate_row_edges(char *row)
 {
 	int	len;
 	int	x;
@@ -104,7 +104,7 @@ int	validate_map(t_game *game)
 	{
 		x = 0;
 		row_len = ft_strlen(map[y]);
-		if (!validate_row_edges(map[y], y))
+		if (!validate_row_edges(map[y]))
 			return (0);
 		while (x < row_len)
 		{

@@ -34,18 +34,6 @@ void	print_game_state(t_game *game)
 	}
 }
 
-int	check_cub_file(const char *file)
-{
-	size_t	len;
-
-	len = ft_strlen(file);
-	if (len <= 4)
-		return (0);
-	if (ft_strncmp(file + len - 4, ".cub", 4) == 0)
-		return (1);
-	return (0);
-}
-
 void	free_map(t_game *game)
 {
 	int	i;

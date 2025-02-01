@@ -91,6 +91,26 @@ int	validate_top_and_bottom(char **map, t_game *game)
 	return (1);
 }
 
+int	validate_row_end(char **map, int y, int x, t_game *game)
+{
+	int	prev_row_len;
+	int	next_row_len;
+
+	if (y < game->map.height - 1)
+		next_row_len = ft_strlen(map[y + 1]);
+	else
+		next_row_len = 0;
+	if (y != 0)
+		prev_row_len = ft_strlen(map[y - 1]);
+	else
+		prev_row_len = 0;
+	if (y > 0 && x > prev_row_len && map[y][x] != '1')
+		return (0);
+	if (y < game->map.height - 1 && x > next_row_len && map[y][x] != '1')
+		return (0);
+	return (1);
+}
+
 int	validate_map(t_game *game)
 {
 	char	**map;
@@ -109,6 +129,8 @@ int	validate_map(t_game *game)
 		while (x < row_len)
 		{
 			if (map[y][x] == ' ' && !validate_row_spaces(map, y, x, game))
+				return (0);
+			if (map[y][x] != ' ' && !validate_row_end(map, y, x, game))
 				return (0);
 			x++;
 		}

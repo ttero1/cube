@@ -151,6 +151,7 @@ int					validate_top_and_bottom(char **map, t_game *game);
 int					validate_row_spaces(char **map, int y, int x, t_game *game);
 int					validate_row_edges(char *row);
 int					validate_player_position(t_game *game);
+int					validate_row_end(char **map, int y, int x, t_game *game);
 
 /* calculate_utils.c */
 bool				check_wall2(int x, int y, t_game *game);

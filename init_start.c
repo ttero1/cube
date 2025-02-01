@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 14:01:16 by mjaakkol          #+#    #+#             */
-/*   Updated: 2025/01/29 15:53:11 by mjaakkol         ###   ########.fr       */
+/*   Updated: 2025/02/01 15:18:01 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	set_player_position(t_game *game, int x, int y, double angle)
 {
-	game->x_pos = x * BLOCK_SIZE + BLOCK_SIZE / 2;
-	game->y_pos = y * BLOCK_SIZE + BLOCK_SIZE / 2;
+	game->x_pos = x * BLOCK_SIZE + (double)BLOCK_SIZE / 2;
+	game->y_pos = y * BLOCK_SIZE + (double)BLOCK_SIZE / 2;
 	game->angle = angle;
 }
 
@@ -62,22 +62,9 @@ void	get_player_position(t_game *game)
 
 void	get_map_size(t_game *game)
 {
-	int	x;
-	int	y;
-
-	x = 0;
-	y = 0;
 	game->map_size_x = game->map.width;
 	game->map_size_y = game->map.height;
 	return ;
-	x = ft_strlen(game->map.points[0]);
-	while (game->map.points[y][0])
-	{
-		y++;
-	}
-	return ;
-	game->map_size_x = x - 1;
-	game->map_size_y = y;
 }
 
 void	load_texture(t_game *game)

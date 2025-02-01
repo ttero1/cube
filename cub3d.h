@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 14:00:17 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/29 15:06:28 by ttero            ###   ########.fr       */
+/*   Updated: 2025/02/01 15:41:05 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 
 # define WIDTH 800
 # define HEIGHT 800
-# define SPEED 0.8
-# define SPEED_RAD 0.05
+# define SPEED 0.2
+# define SPEED_RAD 0.03
 # define BLOCK_SIZE 30
 # define PI 3.141592653589793
 # define RAD 0.01745329251
@@ -47,6 +47,7 @@ typedef struct s_texture
 typedef struct s_raycast
 {
 	double			distance;
+	double			distance_orig;
 	double			x_pos_ray;
 	double			y_pos_ray;
 	int				hit_wall;

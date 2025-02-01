@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 13:30:42 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/29 15:11:43 by ttero            ###   ########.fr       */
+/*   Updated: 2025/02/01 15:45:25 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@ void	paint_block(t_game *game, int x, int y, int flag)
 	init_colors(&color_block, &color_empty);
 	z = -1;
 	a = 0;
-	x *= BLOCK_SIZE / 6;
-	y *= BLOCK_SIZE / 6;
-	while (z++ < BLOCK_SIZE / 6)
+	x *= 5;
+	y *= 5;
+	while (z++ < 5)
 	{
-		while (a < BLOCK_SIZE / 6)
+		while (a < 5)
 		{
 			if (flag == 1)
 				mlx_put_pixel(game->image, x, y, color_block);
@@ -42,7 +42,7 @@ void	paint_block(t_game *game, int x, int y, int flag)
 			x++;
 		}
 		a = 0;
-		x -= BLOCK_SIZE / 6;
+		x -= 5;
 		y++;
 	}
 }
@@ -56,13 +56,12 @@ void	draw_player(t_game *game)
 	x = 0;
 	y = 0;
 	color = ft_pixel(0, 0, 0, 255);
-	mlx_put_pixel(game->image, game->x_pos / 6, game->y_pos / 6, color);
 	while (y < 3)
 	{
 		while (x < 3)
 		{
-			mlx_put_pixel(game->image, game->x_pos / 6 + x, game->y_pos / 6 + y,
-				color);
+			mlx_put_pixel(game->image, game->x_pos * 5 / BLOCK_SIZE + x,
+				game->y_pos * 5 / BLOCK_SIZE + y, color);
 			x++;
 		}
 		x = 0;

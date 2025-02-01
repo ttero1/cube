@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 18:59:02 by ttero             #+#    #+#             */
-/*   Updated: 2025/01/29 15:05:56 by ttero            ###   ########.fr       */
+/*   Updated: 2025/02/01 14:48:22 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ t_raycast	calc_distance(t_game *game, double angle)
 		fisheye -= 2 * PI;
 	if (fisheye < 0)
 		fisheye += 2 * PI;
+	raycast.distance_orig = raycast.distance;
 	raycast.distance = raycast.distance * cos(fisheye);
 	raycast.ray_dir_x = sin(angle);
 	raycast.ray_dir_y = cos(angle);

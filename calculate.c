@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 18:59:02 by ttero             #+#    #+#             */
-/*   Updated: 2025/02/01 14:48:22 by ttero            ###   ########.fr       */
+/*   Updated: 2025/02/02 12:35:59 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,11 @@ t_raycast	calc_distance(t_game *game, double angle)
 	raycast.y_pos_ray = game->y_pos;
 	raycast.hit_wall = -1;
 	raycast.distance = 0;
-	while (raycast.hit_wall == -1 && raycast.distance < 8 * BLOCK_SIZE)
+	while (raycast.hit_wall == -1 && raycast.distance < 20 * BLOCK_SIZE)
 	{
 		cast_rays(game, &raycast, angle);
 	}
-	if (raycast.distance >= 8 * BLOCK_SIZE)
+	if (raycast.distance >= 20 * BLOCK_SIZE)
 		raycast.distance = 9999;
 	game->distance = raycast.distance;
 	fisheye = game->angle - angle;

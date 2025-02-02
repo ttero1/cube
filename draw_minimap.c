@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 13:30:42 by ttero             #+#    #+#             */
-/*   Updated: 2025/02/01 15:45:25 by ttero            ###   ########.fr       */
+/*   Updated: 2025/02/02 21:11:22 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void	paint_block(t_game *game, int x, int y, int flag)
 	a = 0;
 	x *= 5;
 	y *= 5;
+	if (x > WIDTH / 2 || y > HEIGHT / 2) 
+		return ;
 	while (z++ < 5)
 	{
 		while (a < 5)
@@ -55,6 +57,8 @@ void	draw_player(t_game *game)
 
 	x = 0;
 	y = 0;
+	if (game->x_pos * 5 / BLOCK_SIZE > WIDTH / 2 || game->y_pos * 5 / BLOCK_SIZE > HEIGHT / 2)
+		return ;
 	color = ft_pixel(0, 0, 0, 255);
 	while (y < 3)
 	{

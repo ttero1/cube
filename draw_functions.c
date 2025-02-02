@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 11:31:41 by ttero             #+#    #+#             */
-/*   Updated: 2025/02/01 15:45:02 by ttero            ###   ########.fr       */
+/*   Updated: 2025/02/02 12:44:26 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	draw_ceiling(t_game *game, int start, int x)
 			game->map.ceiling_color[2], 255);
 	if (start < 0)
 		start = 0;
-	while (start > 1)
+	while (start >= 0)
 	{
 		mlx_put_pixel(game->image, x, start, color);
 		start--;

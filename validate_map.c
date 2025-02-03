@@ -6,7 +6,7 @@
 /*   By: ttero <ttero@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 10:50:26 by mjaakkol          #+#    #+#             */
-/*   Updated: 2025/01/29 15:10:33 by ttero            ###   ########.fr       */
+/*   Updated: 2025/02/03 11:20:12 by ttero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,9 +104,9 @@ int	validate_row_end(char **map, int y, int x, t_game *game)
 		prev_row_len = ft_strlen(map[y - 1]);
 	else
 		prev_row_len = 0;
-	if (y > 0 && x > prev_row_len && map[y][x] != '1')
+	if (y > 0 && x >= prev_row_len && map[y][x] != '1')
 		return (0);
-	if (y < game->map.height - 1 && x > next_row_len && map[y][x] != '1')
+	if (y < game->map.height - 1 && x >= next_row_len && map[y][x] != '1')
 		return (0);
 	return (1);
 }
